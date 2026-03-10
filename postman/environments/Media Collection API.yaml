@@ -9,7 +9,7 @@ values:
     enabled: true
     type: default
   - key: ownerPassword
-    value: 'StrongPass123!'
+    value: 'F1TzjRpy9XLc7kXA4MA'
     enabled: true
     type: default
   - key: inviteeEmail
@@ -17,7 +17,7 @@ values:
     enabled: true
     type: default
   - key: inviteePassword
-    value: 'StrongPass123!'
+    value: 'F1TzjRpy9XLc7kXA4MA'
     enabled: true
     type: default
   - key: ownerToken
