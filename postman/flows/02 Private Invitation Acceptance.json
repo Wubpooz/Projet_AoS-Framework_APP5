@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "name": "02 Private Invitation Acceptance",
+  "description": "Flow scenario for a private collection invitation and acceptance journey in Postman Local View.",
+  "flow": {
+    "description": "Scenario steps:\n1. Register temporary owner and invitee users.\n2. Log both users in and capture session tokens.\n3. Create a PRIVATE collection as the owner.\n4. Invite the invitee as a COLLABORATOR.\n5. List pending invitations as the invitee.\n6. Accept the invitation.\n7. Verify the invitee can access the private collection.\n8. Verify the accepted member appears in the member list.\n9. Delete the collection for cleanup.\n\nRecommended collection requests: Auth/01-04 and Collections/01,09-12,10,16.",
+    "nodes": {
+      "inviteFlowStart": {
+        "type": "ev/endpoint@3",
+        "pos": {
+          "x": 0,
+          "y": 0
+        },
+        "config": {
+          "inputs": [],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "data": {
+            "triggerType": "ev/endpoint@3"
+          },
+          "namedInputsExpanded": true
+        }
+      },
+      "step1RegisterOwner": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 220,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/auth/register"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "body",
+              "value": "{\"email\":\"{{ownerEmail}}\",\"password\":\"{{ownerPassword}}\",\"name\":\"Owner User\"}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "1. Register Owner",
+          "namedInputsExpanded": false
+        }
+      },
+      "step2RegisterInvitee": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 220,
+          "y": 160
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/auth/register"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "body",
+              "value": "{\"email\":\"{{inviteeEmail}}\",\"password\":\"{{inviteePassword}}\",\"name\":\"Invitee User\"}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "2. Register Invitee",
+          "namedInputsExpanded": false
+        }
+      },
+      "step2bExtractInviteeId": {
+        "type": "sandbox/evaluate@1",
+        "pos": {
+          "x": 220,
+          "y": 300
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "vars",
+              "ref": {
+                "block": "step2RegisterInvitee",
+                "port": "response/body"
+              }
+            }
+          ],
+          "data": "const body = vars;\nif (body.user && body.user.id) pm.collectionVariables.set('inviteeUserId', body.user.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "2b. Extract Invitee ID",
+          "namedInputsExpanded": false
+        }
+      },
+      "step3LoginOwner": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 440,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/auth/login"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "body",
+              "value": "{\"email\":\"{{ownerEmail}}\",\"password\":\"{{ownerPassword}}\"}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "3. Login Owner",
+          "namedInputsExpanded": false
+        }
+      },
+      "step3bExtractOwnerToken": {
+        "type": "sandbox/evaluate@1",
+        "pos": {
+          "x": 440,
+          "y": 160
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "vars",
+              "ref": {
+                "block": "step3LoginOwner",
+                "port": "response/body"
+              }
+            }
+          ],
+          "data": "const body = vars;\nif (body.sessionToken) pm.collectionVariables.set('ownerToken', body.sessionToken);\nif (body.user && body.user.id) pm.collectionVariables.set('ownerUserId', body.user.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "3b. Extract Owner Token",
+          "namedInputsExpanded": false
+        }
+      },
+      "step4LoginInvitee": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 440,
+          "y": 300
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/auth/login"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "body",
+              "value": "{\"email\":\"{{inviteeEmail}}\",\"password\":\"{{inviteePassword}}\"}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "4. Login Invitee",
+          "namedInputsExpanded": false
+        }
+      },
+      "step4bExtractInviteeToken": {
+        "type": "sandbox/evaluate@1",
+        "pos": {
+          "x": 440,
+          "y": 440
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "vars",
+              "ref": {
+                "block": "step4LoginInvitee",
+                "port": "response/body"
+              }
+            }
+          ],
+          "data": "const body = vars;\nif (body.sessionToken) pm.collectionVariables.set('inviteeToken', body.sessionToken);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "4b. Extract Invitee Token",
+          "namedInputsExpanded": false
+        }
+      },
+      "step5CreatePrivateCollection": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 660,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{ownerToken}}"
+            },
+            {
+              "name": "body",
+              "value": "{\"name\":\"Private Watch List\",\"description\":\"A private collection for invitation testing\",\"visibility\":\"PRIVATE\",\"tags\":[\"private\",\"test\"]}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "5. Create PRIVATE Collection",
+          "namedInputsExpanded": false
+        }
+      },
+      "step5bExtractCollectionId": {
+        "type": "sandbox/evaluate@1",
+        "pos": {
+          "x": 660,
+          "y": 160
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "vars",
+              "ref": {
+                "block": "step5CreatePrivateCollection",
+                "port": "response/body"
+              }
+            }
+          ],
+          "data": "const body = vars;\nif (body.id) pm.collectionVariables.set('collectionId', body.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "5b. Extract Collection ID",
+          "namedInputsExpanded": false
+        }
+      },
+      "step6InviteMember": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 880,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/{{collectionId}}/members"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{ownerToken}}"
+            },
+            {
+              "name": "body",
+              "value": "{\"userId\":\"{{inviteeUserId}}\",\"role\":\"COLLABORATOR\"}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "6. Invite Invitee as COLLABORATOR",
+          "namedInputsExpanded": false
+        }
+      },
+      "step7ListInvitations": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 1100,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/invitations"
+            },
+            {
+              "name": "method",
+              "value": "GET"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{inviteeToken}}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "7. List Pending Invitations (Invitee)",
+          "namedInputsExpanded": false
+        }
+      },
+      "step8AcceptInvitation": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 1320,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/{{collectionId}}/invitations/respond"
+            },
+            {
+              "name": "method",
+              "value": "POST"
+            },
+            {
+              "name": "header.Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{inviteeToken}}"
+            },
+            {
+              "name": "body",
+              "value": "{\"accept\":true}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "8. Accept Invitation (Invitee)",
+          "namedInputsExpanded": false
+        }
+      },
+      "step9GetCollectionAsInvitee": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 1540,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/{{collectionId}}"
+            },
+            {
+              "name": "method",
+              "value": "GET"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{inviteeToken}}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "9. Get Collection as Invitee (expect 200)",
+          "namedInputsExpanded": false
+        }
+      },
+      "step10ListMembers": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 1760,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/{{collectionId}}/members"
+            },
+            {
+              "name": "method",
+              "value": "GET"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{ownerToken}}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "10. List Members (verify invitee present)",
+          "namedInputsExpanded": false
+        }
+      },
+      "step11DeleteCollection": {
+        "type": "exec/request@1",
+        "pos": {
+          "x": 1980,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "url",
+              "value": "{{baseUrl}}/api/collections/{{collectionId}}"
+            },
+            {
+              "name": "method",
+              "value": "DELETE"
+            },
+            {
+              "name": "header.Authorization",
+              "value": "Bearer {{ownerToken}}"
+            }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "label": "11. Delete Collection (Cleanup)",
+          "namedInputsExpanded": false
+        }
+      },
+      "logComplete": {
+        "type": "io/log@1",
+        "pos": {
+          "x": 2200,
+          "y": 0
+        },
+        "config": {
+          "inputs": [
+            {
+              "name": "data",
+              "value": "Scenario 02 — Private Invitation Acceptance completed."
+            }
+          ],
+          "data": "",
+          "language": "text/plain",
+          "allowAnyType": true
+        },
+        "ui": {
+          "label": "Done",
+          "namedInputsExpanded": false
+        }
+      }
+    },
+    "connections": {},
+    "annotations": {},
+    "groups": {},
+    "webhook": {
+      "payloadContent": "body-only",
+      "responseType": "default"
+    },
+    "forms": {},
+    "modules": {},
+    "io": {},
+    "ports": {},
+    "meta": {
+      "scenarioType": "invitation-acceptance",
+      "visibility": "PRIVATE"
+    },
+    "scenes": {},
+    "scenarios": {},
+    "config": {
+      "definitions": {},
+      "constants": {}
+    }
+  },
+  "lockbox": {},
+  "info": {
+    "_postman_id": "5c8ba3e8-512b-43d1-b5f5-b93eb7d04a2d"
+  },
+  "_postman_exported_at": "2026-03-10T14:52:26.113Z",
+  "_postman_exported_using": "Postman/Local Mode"
+}

@@ -1,0 +1,31 @@
+$kind: http-request
+name: 01b Create Public Collection
+url: "{{baseUrl}}/api/collections"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Test Public Collection",
+      "description": "A test collection for API testing",
+      "tags": ["test", "api", "public"],
+      "visibility": "PUBLIC"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+
+      // Save collection ID for later use
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('collectionId', jsonData.id);
+        console.log('Saved collectionId:', jsonData.id);
+      }
+    language: text/javascript
+examples: ./.resources\01b Create Public Collection.resources\examples
+order: 1876

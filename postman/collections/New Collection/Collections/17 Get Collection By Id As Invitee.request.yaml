@@ -1,0 +1,25 @@
+$kind: http-request
+name: '17 Get Collection By Id As Invitee'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 18000
+description: Get the current collection as the invitee using the invitee bearer token
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{inviteeToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+
+      pm.test('Collection has required fields', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.have.property('id');
+        pm.expect(jsonData).to.have.property('name');
+        pm.expect(jsonData).to.have.property('visibility');
+      });

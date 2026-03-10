@@ -1,0 +1,21 @@
+$kind: http-request
+name: '07 List Pending Invitations'
+method: GET
+url: '{{baseUrl}}/api/collections/invitations'
+order: 7000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{inviteeToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      const collectionId = pm.collectionVariables.get('collectionId');
+      pm.expect(jsonData.some((invitation) => invitation.collectionId === collectionId)).to.equal(true);

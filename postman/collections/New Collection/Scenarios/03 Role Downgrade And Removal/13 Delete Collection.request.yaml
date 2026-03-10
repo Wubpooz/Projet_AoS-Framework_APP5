@@ -1,0 +1,20 @@
+$kind: http-request
+name: '13 Delete Collection'
+method: DELETE
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 13000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.collectionVariables.unset('collectionId');
+      pm.collectionVariables.unset('memberId');

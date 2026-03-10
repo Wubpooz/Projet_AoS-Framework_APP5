@@ -2,7 +2,7 @@ $kind: http-request
 name: '12 Accept Invitation (Invitee)'
 method: POST
 url: '{{baseUrl}}/api/collections/{{collectionId}}/invitations/respond'
-order: 12000
+order: 13000
 description: Accept the collection invitation as the invitee
 auth:
   type: bearer
@@ -25,7 +25,7 @@ scripts:
       pm.test('Status code is 200', () => {
         pm.expect(pm.response.code).to.equal(200);
       });
-      
+
       pm.test('Invitation is accepted', () => {
         const jsonData = pm.response.json();
         pm.expect(jsonData.accepted).to.equal(true);

@@ -1,0 +1,23 @@
+$kind: http-request
+name: '04 List Public Collections'
+method: GET
+url: '{{baseUrl}}/api/collections'
+order: 4000
+queryParams:
+  - key: page
+    value: '1'
+  - key: pageSize
+    value: '20'
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      const collectionId = pm.collectionVariables.get('collectionId');
+      pm.expect(jsonData.data.some((collection) => collection.id === collectionId)).to.equal(true);

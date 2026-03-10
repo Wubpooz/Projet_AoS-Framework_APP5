@@ -1,0 +1,29 @@
+$kind: http-request
+name: '08 Downgrade Invitee To Reader'
+method: PATCH
+url: '{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}'
+order: 8000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "role": "READER"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      pm.expect(jsonData.role).to.equal('READER');

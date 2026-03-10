@@ -2,7 +2,7 @@ $kind: http-request
 name: '13 Update Member Role'
 method: PATCH
 url: '{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}'
-order: 13000
+order: 14000
 description: Update the member role (owner only)
 headers:
   - key: Content-Type

@@ -1,0 +1,34 @@
+$kind: http-request
+name: '05 Create Private Collection'
+method: POST
+url: '{{baseUrl}}/api/collections'
+order: 5000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Role Test Collection",
+      "description": "Scenario 03 role downgrade and removal",
+      "tags": ["role", "scenario"],
+      "visibility": "PRIVATE"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+      
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('collectionId', jsonData.id);
+      }

@@ -2,7 +2,7 @@ $kind: http-request
 name: '15 Remove Media From Collection'
 method: DELETE
 url: '{{baseUrl}}/api/collections/{{collectionId}}/media/{{collectionMediaId}}'
-order: 15000
+order: 16000
 description: Remove media from the collection
 scripts:
   - type: afterResponse

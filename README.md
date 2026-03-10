@@ -2,6 +2,9 @@
 
 A REST API backend for managing cross-platform media watch lists. Users can create collections of movies, shows, books, or articles, share them with others, and manage who can view or edit them.
 
+
+# TODO ADD MCP
+
 ## What's been built
 
 - **Authentication** — register, login, logout, forgot/reset password via [Better Auth](https://github.com/better-auth/better-auth). Session tokens are returned in the `set-auth-token` response header.
@@ -116,20 +119,25 @@ Import the collection from `postman/collections/New Collection/` into Postman (F
 
 Import `postman/environments/Media Collection API.yaml`. It pre-fills `baseUrl`, test user credentials, and empty slots for `ownerToken`, `inviteeToken`, `collectionId`, etc. that get populated by request scripts as you run through the collection.
 
-### Flows (end-to-end scenarios)
+### Scenario testing (recommended)
 
-Three scenario flows are in `postman/flows/`. Import any of them via File → Import:
+The easiest and most maintainable way to run end-to-end scenarios is to reuse the existing Postman requests in sequence.
 
-**01 Public Collection Lifecycle**
-Register → login → create a PUBLIC collection → list it anonymously → fetch it → update it → verify the update → delete it.
+See `docs/postman-testing-guide.md` for three ready-to-run scenario playbooks:
 
-**02 Private Invitation Acceptance**
-Register owner and invitee → both log in → owner creates a PRIVATE collection → invites the invitee as COLLABORATOR → invitee lists and accepts the invitation → invitee accesses the collection → verify they appear in the member list → cleanup.
+- **01 Public Collection Lifecycle**
+- **02 Private Invitation Acceptance**
+- **03 Role Downgrade And Removal**
 
-**03 Role Downgrade And Removal**
-Same setup as scenario 02, but after acceptance the owner downgrades the member to READER, verifies the change, then removes them entirely. A final request confirms the removed member gets a 403 on the private collection.
+These scenarios reuse the current request scripts, which already persist tokens and IDs in collection variables such as `ownerToken`, `inviteeToken`, `collectionId`, and `memberId`.
 
-Each flow stores intermediate values (tokens, IDs) in collection variables via `sandbox/evaluate` blocks, so steps further down the chain automatically pick them up.
+If you want a one-click Collection Runner workflow, use the prebuilt scenario folders under `postman/collections/New Collection/Scenarios/`.
+
+### Flows (optional)
+
+Three experimental scenario flows are also kept in `postman/flows/` as reference material for Postman Local View.
+
+They are useful for visual exploration, but the standard request-sequence approach in `docs/postman-testing-guide.md` is the preferred workflow for day-to-day testing and maintenance.
 
 ---
 

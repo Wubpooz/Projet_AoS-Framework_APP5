@@ -2,7 +2,7 @@ $kind: http-request
 name: '06 Add Media To Collection'
 method: POST
 url: '{{baseUrl}}/api/collections/{{collectionId}}/media'
-order: 6000
+order: 7000
 headers:
   - key: Content-Type
     value: application/json
@@ -20,7 +20,7 @@ scripts:
       pm.test('Status code is 201', () => {
         pm.expect(pm.response.code).to.equal(201);
       });
-      
+
       // Save collection media ID for later operations
       const jsonData = pm.response.json();
       if (jsonData.id) {

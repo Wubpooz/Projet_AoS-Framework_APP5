@@ -2,7 +2,7 @@ $kind: http-request
 name: '05 Create Media For Collection'
 method: POST
 url: '{{baseUrl}}/api/media'
-order: 5000
+order: 6000
 description: Create a media item to add to the collection
 headers:
   - key: Content-Type
@@ -26,7 +26,7 @@ scripts:
       pm.test('Status code is 201', () => {
         pm.expect(pm.response.code).to.equal(201);
       });
-      
+
       // Save media ID for adding to collection
       const jsonData = pm.response.json();
       if (jsonData.id) {

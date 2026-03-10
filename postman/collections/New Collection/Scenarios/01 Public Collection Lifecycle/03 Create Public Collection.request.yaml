@@ -1,0 +1,34 @@
+$kind: http-request
+name: '03 Create Public Collection'
+method: POST
+url: '{{baseUrl}}/api/collections'
+order: 3000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Public Scenario Collection",
+      "description": "Scenario 01 public lifecycle",
+      "tags": ["public", "scenario"],
+      "visibility": "PUBLIC"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+      
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('collectionId', jsonData.id);
+      }

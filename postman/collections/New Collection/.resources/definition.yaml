@@ -1,34 +1,17 @@
 $kind: collection
 name: Media Collection API
-description: A complete API test collection for managing media collections (movies, TV shows, books, etc.)
+description: A complete API test collection for managing media collections
+  (movies, TV shows, books, etc.)
 variables:
-  - key: baseUrl
-    value: 'http://localhost:3000'
-  - key: ownerEmail
-    value: 'owner@example.com'
-  - key: ownerPassword
-    value: 'F1TzjRpy9XLc7kXA4MA'
-  - key: inviteeEmail
-    value: 'invitee@example.com'
-  - key: inviteePassword
-    value: 'F1TzjRpy9XLc7kXA4MA'
-  - key: ownerToken
-    value: ''
-  - key: inviteeToken
-    value: ''
-  - key: ownerUserId
-    value: ''
-  - key: inviteeUserId
-    value: ''
-  - key: publicUserId
-    value: ''
-  - key: collectionId
-    value: ''
-  - key: mediaId
-    value: ''
-  - key: collectionMediaId
-    value: ''
-  - key: memberId
-    value: ''
-  - key: resetToken
-    value: ''
+  baseUrl: http://localhost:3000
+  ownerEmail: owner@example.com
+  ownerPassword: F1TzjRpy9XLc7kXA4MA
+  inviteeEmail: invitee@example.com
+  inviteePassword: F1TzjRpy9XLc7kXA4MA
+  ownerToken: ""
+  inviteeToken: ""
+  ownerUserId: ""
+  inviteeUserId: ""
+  publicUserId: ""
+  mediaId: ""
+  resetToken: ""

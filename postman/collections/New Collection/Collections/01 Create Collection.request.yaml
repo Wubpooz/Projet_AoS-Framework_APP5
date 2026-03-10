@@ -1,11 +1,9 @@
 $kind: http-request
-name: '01 Create Collection'
 method: POST
-url: '{{baseUrl}}/api/collections'
-order: 1000
+url: "{{baseUrl}}/api/collections"
+order: 2000
 headers:
-  - key: Content-Type
-    value: application/json
+  Content-Type: application/json
 body:
   type: json
   content: |-
@@ -17,15 +15,15 @@ body:
     }
 scripts:
   - type: afterResponse
-    language: text/javascript
     code: |-
       pm.test('Status code is 201', () => {
         pm.expect(pm.response.code).to.equal(201);
       });
-      
+
       // Save collection ID for later use
       const jsonData = pm.response.json();
       if (jsonData.id) {
         pm.collectionVariables.set('collectionId', jsonData.id);
         console.log('Saved collectionId:', jsonData.id);
       }
+    language: text/javascript

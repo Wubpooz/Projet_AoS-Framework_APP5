@@ -2,7 +2,7 @@ $kind: http-request
 name: '09 Invite Member To Collection'
 method: POST
 url: '{{baseUrl}}/api/collections/{{collectionId}}/members'
-order: 9000
+order: 10000
 description: Invite the invitee user to the collection as a collaborator
 headers:
   - key: Content-Type
@@ -21,7 +21,7 @@ scripts:
       pm.test('Status code is 201', () => {
         pm.expect(pm.response.code).to.equal(201);
       });
-      
+
       // Save member ID for later operations
       const jsonData = pm.response.json();
       if (jsonData.id) {

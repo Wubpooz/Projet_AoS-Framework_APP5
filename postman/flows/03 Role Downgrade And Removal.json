@@ -1,0 +1,413 @@
+{
+  "version": 1,
+  "name": "03 Role Downgrade And Removal",
+  "description": "Flow scenario for role downgrade and member removal in Postman Local View.",
+  "flow": {
+    "description": "Scenario steps:\n1. Register temporary owner and member users.\n2. Log both users in and capture session tokens.\n3. Create a PRIVATE collection as the owner.\n4. Invite the member as a COLLABORATOR.\n5. Accept the invitation as the member.\n6. Downgrade the member role to READER.\n7. Verify the downgraded role in the member list.\n8. Remove the member from the collection.\n9. Verify the member no longer appears in the member list.\n10. Verify the removed member can no longer access the private collection.\n11. Delete the collection for cleanup.\n\nRecommended collection requests: Auth/01-04 and Collections/01,09,12-14,10,16.",
+    "nodes": {
+      "roleFlowStart": {
+        "type": "ev/endpoint@3",
+        "pos": { "x": 0, "y": 0 },
+        "config": {
+          "inputs": [],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": {
+          "data": { "triggerType": "ev/endpoint@3" },
+          "namedInputsExpanded": true
+        }
+      },
+      "step1RegisterOwner": {
+        "type": "exec/request@1",
+        "pos": { "x": 220, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/auth/register" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "body", "value": "{\"email\":\"{{ownerEmail}}\",\"password\":\"{{ownerPassword}}\",\"name\":\"Owner User\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "1. Register Owner", "namedInputsExpanded": false }
+      },
+      "step2RegisterMember": {
+        "type": "exec/request@1",
+        "pos": { "x": 220, "y": 160 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/auth/register" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "body", "value": "{\"email\":\"{{inviteeEmail}}\",\"password\":\"{{inviteePassword}}\",\"name\":\"Member User\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "2. Register Member", "namedInputsExpanded": false }
+      },
+      "step2bExtractMemberId": {
+        "type": "sandbox/evaluate@1",
+        "pos": { "x": 220, "y": 300 },
+        "config": {
+          "inputs": [
+            { "name": "vars", "ref": { "block": "step2RegisterMember", "port": "response/body" } }
+          ],
+          "data": "const body = vars;\nif (body.user && body.user.id) pm.collectionVariables.set('inviteeUserId', body.user.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": { "label": "2b. Extract Member User ID", "namedInputsExpanded": false }
+      },
+      "step3LoginOwner": {
+        "type": "exec/request@1",
+        "pos": { "x": 440, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/auth/login" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "body", "value": "{\"email\":\"{{ownerEmail}}\",\"password\":\"{{ownerPassword}}\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "3. Login Owner", "namedInputsExpanded": false }
+      },
+      "step3bExtractOwnerToken": {
+        "type": "sandbox/evaluate@1",
+        "pos": { "x": 440, "y": 160 },
+        "config": {
+          "inputs": [
+            { "name": "vars", "ref": { "block": "step3LoginOwner", "port": "response/body" } }
+          ],
+          "data": "const body = vars;\nif (body.sessionToken) pm.collectionVariables.set('ownerToken', body.sessionToken);\nif (body.user && body.user.id) pm.collectionVariables.set('ownerUserId', body.user.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": { "label": "3b. Extract Owner Token", "namedInputsExpanded": false }
+      },
+      "step4LoginMember": {
+        "type": "exec/request@1",
+        "pos": { "x": 440, "y": 300 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/auth/login" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "body", "value": "{\"email\":\"{{inviteeEmail}}\",\"password\":\"{{inviteePassword}}\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "4. Login Member", "namedInputsExpanded": false }
+      },
+      "step4bExtractMemberToken": {
+        "type": "sandbox/evaluate@1",
+        "pos": { "x": 440, "y": 440 },
+        "config": {
+          "inputs": [
+            { "name": "vars", "ref": { "block": "step4LoginMember", "port": "response/body" } }
+          ],
+          "data": "const body = vars;\nif (body.sessionToken) pm.collectionVariables.set('inviteeToken', body.sessionToken);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": { "label": "4b. Extract Member Token", "namedInputsExpanded": false }
+      },
+      "step5CreatePrivateCollection": {
+        "type": "exec/request@1",
+        "pos": { "x": 660, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" },
+            { "name": "body", "value": "{\"name\":\"Role Test Collection\",\"description\":\"Testing role downgrade and removal\",\"visibility\":\"PRIVATE\",\"tags\":[\"role\",\"test\"]}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "5. Create PRIVATE Collection", "namedInputsExpanded": false }
+      },
+      "step5bExtractCollectionId": {
+        "type": "sandbox/evaluate@1",
+        "pos": { "x": 660, "y": 160 },
+        "config": {
+          "inputs": [
+            { "name": "vars", "ref": { "block": "step5CreatePrivateCollection", "port": "response/body" } }
+          ],
+          "data": "const body = vars;\nif (body.id) pm.collectionVariables.set('collectionId', body.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": { "label": "5b. Extract Collection ID", "namedInputsExpanded": false }
+      },
+      "step6InviteMember": {
+        "type": "exec/request@1",
+        "pos": { "x": 880, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/members" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" },
+            { "name": "body", "value": "{\"userId\":\"{{inviteeUserId}}\",\"role\":\"COLLABORATOR\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "6. Invite Member as COLLABORATOR", "namedInputsExpanded": false }
+      },
+      "step6bExtractMemberId": {
+        "type": "sandbox/evaluate@1",
+        "pos": { "x": 880, "y": 160 },
+        "config": {
+          "inputs": [
+            { "name": "vars", "ref": { "block": "step6InviteMember", "port": "response/body" } }
+          ],
+          "data": "const body = vars;\nif (body.id) pm.collectionVariables.set('memberId', body.id);",
+          "language": "text/javascript",
+          "allowAnyType": false
+        },
+        "ui": { "label": "6b. Extract Member ID", "namedInputsExpanded": false }
+      },
+      "step7AcceptInvitation": {
+        "type": "exec/request@1",
+        "pos": { "x": 1100, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/invitations/respond" },
+            { "name": "method", "value": "POST" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "header.Authorization", "value": "Bearer {{inviteeToken}}" },
+            { "name": "body", "value": "{\"accept\":true}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "7. Accept Invitation (Member)", "namedInputsExpanded": false }
+      },
+      "step8DowngradeRole": {
+        "type": "exec/request@1",
+        "pos": { "x": 1320, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}" },
+            { "name": "method", "value": "PATCH" },
+            { "name": "header.Content-Type", "value": "application/json" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" },
+            { "name": "body", "value": "{\"role\":\"READER\"}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "8. Downgrade Role to READER", "namedInputsExpanded": false }
+      },
+      "step9ListMembersAfterDowngrade": {
+        "type": "exec/request@1",
+        "pos": { "x": 1540, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/members" },
+            { "name": "method", "value": "GET" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "9. List Members (verify READER role)", "namedInputsExpanded": false }
+      },
+      "step10RemoveMember": {
+        "type": "exec/request@1",
+        "pos": { "x": 1760, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}" },
+            { "name": "method", "value": "DELETE" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "10. Remove Member", "namedInputsExpanded": false }
+      },
+      "step11ListMembersAfterRemoval": {
+        "type": "exec/request@1",
+        "pos": { "x": 1980, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}/members" },
+            { "name": "method", "value": "GET" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "11. List Members (verify removed)", "namedInputsExpanded": false }
+      },
+      "step12GetCollectionAsRemovedMember": {
+        "type": "exec/request@1",
+        "pos": { "x": 2200, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}" },
+            { "name": "method", "value": "GET" },
+            { "name": "header.Authorization", "value": "Bearer {{inviteeToken}}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "12. Verify Removed Member Denied (expect 403)", "namedInputsExpanded": false }
+      },
+      "step13DeleteCollection": {
+        "type": "exec/request@1",
+        "pos": { "x": 2420, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "url", "value": "{{baseUrl}}/api/collections/{{collectionId}}" },
+            { "name": "method", "value": "DELETE" },
+            { "name": "header.Authorization", "value": "Bearer {{ownerToken}}" }
+          ],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false
+        },
+        "ui": { "label": "13. Delete Collection (Cleanup)", "namedInputsExpanded": false }
+      },
+      "logComplete": {
+        "type": "io/log@1",
+        "pos": { "x": 2640, "y": 0 },
+        "config": {
+          "inputs": [
+            { "name": "data", "value": "Scenario 03 — Role Downgrade And Removal completed." }
+          ],
+          "data": "",
+          "language": "text/plain",
+          "allowAnyType": true
+        },
+        "ui": { "label": "Done", "namedInputsExpanded": false }
+      }
+    },
+    "connections": {
+      "c-start-register-owner": {
+        "src": { "block": "roleFlowStart", "port": "exec/out" },
+        "dest": { "block": "step1RegisterOwner", "port": "exec/in" }
+      },
+      "c-register-owner-register-member": {
+        "src": { "block": "step1RegisterOwner", "port": "exec/out" },
+        "dest": { "block": "step2RegisterMember", "port": "exec/in" }
+      },
+      "c-register-member-body-extract": {
+        "src": { "block": "step2RegisterMember", "port": "response/body" },
+        "dest": { "block": "step2bExtractMemberId", "port": "vars" }
+      },
+      "c-register-member-login-owner": {
+        "src": { "block": "step2RegisterMember", "port": "exec/out" },
+        "dest": { "block": "step3LoginOwner", "port": "exec/in" }
+      },
+      "c-login-owner-body-extract": {
+        "src": { "block": "step3LoginOwner", "port": "response/body" },
+        "dest": { "block": "step3bExtractOwnerToken", "port": "vars" }
+      },
+      "c-login-owner-login-member": {
+        "src": { "block": "step3LoginOwner", "port": "exec/out" },
+        "dest": { "block": "step4LoginMember", "port": "exec/in" }
+      },
+      "c-login-member-body-extract": {
+        "src": { "block": "step4LoginMember", "port": "response/body" },
+        "dest": { "block": "step4bExtractMemberToken", "port": "vars" }
+      },
+      "c-login-member-create-collection": {
+        "src": { "block": "step4LoginMember", "port": "exec/out" },
+        "dest": { "block": "step5CreatePrivateCollection", "port": "exec/in" }
+      },
+      "c-create-collection-body-extract": {
+        "src": { "block": "step5CreatePrivateCollection", "port": "response/body" },
+        "dest": { "block": "step5bExtractCollectionId", "port": "vars" }
+      },
+      "c-create-collection-invite": {
+        "src": { "block": "step5CreatePrivateCollection", "port": "exec/out" },
+        "dest": { "block": "step6InviteMember", "port": "exec/in" }
+      },
+      "c-invite-body-extract": {
+        "src": { "block": "step6InviteMember", "port": "response/body" },
+        "dest": { "block": "step6bExtractMemberId", "port": "vars" }
+      },
+      "c-invite-accept": {
+        "src": { "block": "step6InviteMember", "port": "exec/out" },
+        "dest": { "block": "step7AcceptInvitation", "port": "exec/in" }
+      },
+      "c-accept-downgrade": {
+        "src": { "block": "step7AcceptInvitation", "port": "exec/out" },
+        "dest": { "block": "step8DowngradeRole", "port": "exec/in" }
+      },
+      "c-downgrade-list-members": {
+        "src": { "block": "step8DowngradeRole", "port": "exec/out" },
+        "dest": { "block": "step9ListMembersAfterDowngrade", "port": "exec/in" }
+      },
+      "c-list-members-remove": {
+        "src": { "block": "step9ListMembersAfterDowngrade", "port": "exec/out" },
+        "dest": { "block": "step10RemoveMember", "port": "exec/in" }
+      },
+      "c-remove-list-after": {
+        "src": { "block": "step10RemoveMember", "port": "exec/out" },
+        "dest": { "block": "step11ListMembersAfterRemoval", "port": "exec/in" }
+      },
+      "c-list-after-verify-denied": {
+        "src": { "block": "step11ListMembersAfterRemoval", "port": "exec/out" },
+        "dest": { "block": "step12GetCollectionAsRemovedMember", "port": "exec/in" }
+      },
+      "c-verify-denied-delete": {
+        "src": { "block": "step12GetCollectionAsRemovedMember", "port": "exec/out" },
+        "dest": { "block": "step13DeleteCollection", "port": "exec/in" }
+      },
+      "c-delete-log": {
+        "src": { "block": "step13DeleteCollection", "port": "exec/out" },
+        "dest": { "block": "logComplete", "port": "exec/in" }
+      }
+    },
+    "annotations": {},
+    "groups": {},
+    "webhook": {
+      "payloadContent": "body-only",
+      "responseType": "default"
+    },
+    "forms": {},
+    "modules": {},
+    "io": {},
+    "ports": {},
+    "meta": {
+      "scenarioType": "role-downgrade-removal",
+      "visibility": "PRIVATE"
+    },
+    "scenes": {},
+    "scenarios": {},
+    "config": {
+      "definitions": {},
+      "constants": {}
+    }
+  },
+  "lockbox": {},
+  "info": {
+    "_postman_id": "4df963cb-da2c-4db4-b6c6-fb11159e2131"
+  },
+  "_postman_exported_at": "2026-03-10T13:35:00.000Z",
+  "_postman_exported_using": "Postman/Local Mode"
+}

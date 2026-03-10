@@ -1,0 +1,17 @@
+$kind: http-request
+name: '12 Verify Removed Invitee Cannot Access'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 12000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{inviteeToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 404', () => {
+        pm.expect(pm.response.code).to.equal(404);
+      });
