@@ -7,11 +7,11 @@ variables:
   - key: ownerEmail
     value: 'owner@example.com'
   - key: ownerPassword
-    value: 'StrongPass123!'
+    value: 'F1TzjRpy9XLc7kXA4MA'
   - key: inviteeEmail
     value: 'invitee@example.com'
   - key: inviteePassword
-    value: 'StrongPass123!'
+    value: 'F1TzjRpy9XLc7kXA4MA'
   - key: ownerToken
     value: ''
   - key: inviteeToken
