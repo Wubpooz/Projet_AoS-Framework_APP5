@@ -1,0 +1,23 @@
+$kind: http-request
+name: '11 List Pending Invitations (Invitee)'
+method: GET
+url: '{{baseUrl}}/api/collections/invitations'
+order: 11000
+description: Get pending invitations for the invitee user
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{inviteeToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is an array', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.be.an('array');
+      });

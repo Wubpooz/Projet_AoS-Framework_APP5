@@ -1,0 +1,21 @@
+$kind: http-request
+name: '08 Update Collection Media Position'
+method: PATCH
+url: '{{baseUrl}}/api/collections/{{collectionId}}/media/{{collectionMediaId}}'
+order: 8000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "position": 5
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

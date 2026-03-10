@@ -1,0 +1,14 @@
+$kind: http-request
+name: '02 API Root Info'
+method: GET
+url: '{{baseUrl}}/api'
+order: 2000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

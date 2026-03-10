@@ -1,0 +1,4 @@
+$kind: collection
+name: System
+description: System and health check endpoints
+order: 1000

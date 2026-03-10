@@ -1,0 +1,22 @@
+$kind: http-request
+name: '08 Logout'
+method: POST
+url: '{{baseUrl}}/api/auth/logout'
+order: 8000
+description: 'Note: Run this at the end of testing to clean up the session.'
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });

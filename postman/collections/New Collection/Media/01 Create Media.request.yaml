@@ -1,0 +1,39 @@
+$kind: http-request
+name: '01 Create Media'
+method: POST
+url: '{{baseUrl}}/api/media'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Inception",
+      "description": "A thief who steals corporate secrets through dream-sharing technology",
+      "type": "FILM",
+      "releaseDate": "2010-07-16T00:00:00.000Z",
+      "directorAuthor": "Christopher Nolan",
+      "tags": ["sci-fi", "thriller"],
+      "platforms": ["Netflix", "Amazon Prime"],
+      "url": "https://example.com/inception"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      // Save media ID for later use
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('mediaId', jsonData.id);
+        console.log('Saved mediaId:', jsonData.id);
+      }

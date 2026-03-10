@@ -1,0 +1,9 @@
+$kind: collection
+name: Media
+description: Media management endpoints
+order: 4000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'

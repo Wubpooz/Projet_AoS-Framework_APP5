@@ -1,0 +1,23 @@
+$kind: http-request
+name: '01 Get My Profile'
+method: GET
+url: '{{baseUrl}}/api/users/me'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      pm.test('User object has required fields', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.have.property('user');
+        pm.expect(jsonData.user).to.have.property('id');
+        pm.expect(jsonData.user).to.have.property('email');
+      });

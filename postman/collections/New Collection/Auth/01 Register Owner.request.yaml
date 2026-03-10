@@ -1,0 +1,39 @@
+$kind: http-request
+name: '01 Register Owner'
+method: POST
+url: '{{baseUrl}}/api/auth/register'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{ownerEmail}}",
+      "password": "{{ownerPassword}}",
+      "name": "Owner User"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      // Save owner user data
+      const json = pm.response.json();
+      if (json.user?.id) {
+        pm.collectionVariables.set('ownerUserId', json.user.id);
+        pm.collectionVariables.set('publicUserId', json.user.id);
+        console.log('Saved ownerUserId:', json.user.id);
+      }
+      if (json.sessionToken) {
+        pm.collectionVariables.set('ownerToken', json.sessionToken);
+        console.log('Saved ownerToken from registration');
+      }

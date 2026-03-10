@@ -1,0 +1,47 @@
+$kind: http-request
+name: '03 Login Owner'
+method: POST
+url: '{{baseUrl}}/api/auth/login'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{ownerEmail}}",
+      "password": "{{ownerPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      // Save owner token from response body or header
+      const jsonData = pm.response.json();
+      if (jsonData.sessionToken) {
+        pm.collectionVariables.set('ownerToken', jsonData.sessionToken);
+        console.log('Saved ownerToken from response body');
+      }
+      
+      // Also check set-auth-token header
+      const authHeader = pm.response.headers.get('set-auth-token');
+      if (authHeader) {
+        pm.collectionVariables.set('ownerToken', authHeader);
+        console.log('Saved ownerToken from header');
+      }
+      
+      // Save owner user ID
+      if (jsonData.user && jsonData.user.id) {
+        pm.collectionVariables.set('ownerUserId', jsonData.user.id);
+        pm.collectionVariables.set('publicUserId', jsonData.user.id);
+        console.log('Saved ownerUserId:', jsonData.user.id);
+      }

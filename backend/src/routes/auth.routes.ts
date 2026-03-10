@@ -20,7 +20,6 @@ authRoutes.post(
         'application/json': {
           example: {
             email: 'user@example.com',
-            password: '********',
             name: 'John Doe',
           },
         },
@@ -88,7 +87,6 @@ authRoutes.post(
         'application/json': {
           example: {
             email: 'user@example.com',
-            password: '********',
           },
         },
       },
@@ -283,7 +281,6 @@ authRoutes.post(
         'application/json': {
           example: {
             token: 'reset_token_here',
-            newPassword: 'newpassword123',
           },
         },
       },
