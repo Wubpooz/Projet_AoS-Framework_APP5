@@ -14,22 +14,29 @@ On veut créer une application backend qui permet aux utilisateurs de créer et 
 ```
 bun install
 ```
-3. Start Postgres (Docker):
-```
+3. Start Postgres (Docker) and ensure the container is running before starting the app:
+```bash
 docker run --name aos-postgres -e POSTGRES_USER=johndoe -e POSTGRES_PASSWORD=randompassword -e POSTGRES_DB=mydb -p 5432:5432 -d postgres:16
+# or if previously created:
+docker start aos-postgres
 ```
-4. Add environment variables in `backend/.env` (see `backend/.env.example`).
+4. Copy/modify environment variables:
+```bash
+cp backend/.env.example backend/.env
+# or manually set DATABASE_URL and other keys
+```
+Update `backend/.env` with the correct `DATABASE_URL` (the example uses `johndoe:randompassword` which should be changed).
 5. Generate Prisma client and apply migrations:
-```
+```bash
 bun run prisma:generate
 bun run prisma:migrate
 ```
 6. Seed the database:
-```
-bun run db:seed
+```bash
+bun run prisma:seed
 ```
 7. Run the development server:
-```
+```bash
 bun run dev
 ```
 
@@ -43,26 +50,29 @@ Notes:
 - Update `prisma/schema.prisma` with your changes.
 - Run `bun run prisma:generate` to regenerate the Prisma client.
 - Run `bun run prisma:migrate` to apply the new schema to the database.
-- Run `bun run db:seed` to re-seed the database with the new schema (optional, depending on your changes).
+- Run `bun run prisma:seed` to re-seed the database with the new schema (optional, depending on your changes).
 
 
 &nbsp;  
 ## P1
 - [x] Database schema
 - [x] Database seeding
-- [ ] API endpoints for CRUD operations on Media, Collections, and Users (with all HTTP verbs, pagination, filtering, navigation, validation)
+- [x] API endpoints for CRUD operations on Media, Collections, and Users (all HTTP verbs implemented)
   - [x] Setup Hono et Bun (with routes, validation, error handling)
-  - [x] Authentification endpoints working
-  - [ ] Implement API endpoints (CRUD for Media, Collections, Users)
-    - [ ] Users: 
-    - [ ] Media: 
-    - [ ] Collections: 
-  - [ ] Implement pagination, filtering, and navigation for listing endpoints
+  - [x] Authentication endpoints working (register/login/logout/forgot/reset/me)
+  - [x] Implement API endpoints (CRUD for Media, Collections, Users)
+    - [x] Users (profile read/update, public lookup)
+    - [x] Media (create/list/get/patch/delete with access control)
+    - [x] Collections (create/list/get/patch/delete plus media/members/invitations)
+  - [x] Implement pagination, filtering, and navigation for listing endpoints
   - [x] Implement validation with Zod for request bodies and query parameters
 - [x] Setup Better-auth
-- [ ] Dockerize
-- [ ] Tests (unitaires, postman)
-- [x] OpenAPI
+- [ ] Dockerize (not yet configured)
+- [ ] Tests (no automated tests or Postman collection)
+- [x] OpenAPI (generated, accessible via /openapi and /docs)
+
+> **Note:** database connection must be available at `DATABASE_URL` and the sample `.env` values should be replaced; startup currently logs `dbConnection: "error"` if the Postgres instance isn't running.
+
 
 ## P2
 - [ ] gestion des droits d'accès (collaborateurs, lecteurs)
