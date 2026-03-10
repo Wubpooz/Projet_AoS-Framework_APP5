@@ -5,3 +5,10 @@ workspace:
 localResources:
   specs:
     - ..\docs\openapi.yml
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+cloudResources:
+  specs:
+    ..\docs\openapi.yml: 3e468247-fdb9-4e7a-8868-86d099fac31b
+  collections:
+    ..\postman\collections\Media Collection API: 48296547-612b72eb-1847-4b6a-b990-6b88410f45ef
