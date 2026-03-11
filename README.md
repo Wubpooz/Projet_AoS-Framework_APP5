@@ -10,6 +10,7 @@ A REST API backend for managing cross-platform media watch lists. Users can crea
 - **Media** — full CRUD with access control. Only the creator can modify or delete their entries.
 - **Collections** — create/list/get/update/delete, with public or private visibility. Supports pagination, tag filtering, and title search.
 - **Roles & invitations** — collection owners can invite users as `COLLABORATOR` or `READER`. Invitees accept or decline via a dedicated endpoint. Owners can change roles or remove members at any time.
+- **MCP server** — stateless HTTP `/mcp` transport plus a stdio entrypoint that reuses the existing collection, media, and user services with per-call bearer-token auth.
 - **OpenAPI spec** — auto-generated and served at `/openapi` (JSON) and `/docs` (Scalar UI).
 - **Rate limiting** — basic rate limiter on all routes.
 
@@ -52,6 +53,7 @@ docker start aos-postgres
 # 3. Set up environment
 cp backend/.env.example backend/.env
 # Edit backend/.env — at minimum update DATABASE_URL
+# MCP is enabled by default outside production; set MCP_ENABLED=true explicitly in prod when you are ready
 
 # 4. Set up the database
 bun run prisma:generate
@@ -79,6 +81,9 @@ bun test
 # Run tests for a specific route
 bun test backend/src/routes/collection.routes.test.ts
 
+# Run only MCP tests
+bun run mcp:test
+
 # Watch mode
 bun test --watch
 ```
@@ -94,6 +99,50 @@ Once the server is running:
 - **Scalar UI:** `http://localhost:3000/docs`
 - **Raw OpenAPI JSON:** `http://localhost:3000/openapi`
 - **Static copy:** `docs/openapi.yml`
+
+MCP uses its own protocol surface rather than OpenAPI. See `docs/mcp.md` for tool names, auth expectations, and transport details.
+
+---
+
+## MCP
+
+The backend now exposes a Model Context Protocol server that reuses the same service-layer business logic as the REST routes.
+
+### Transports
+
+- **HTTP / Streamable HTTP:** `http://localhost:3000/mcp`
+- **stdio:** `bun run mcp:stdio`
+
+### Feature flag
+
+Set `MCP_ENABLED=true` to expose the MCP server. In this repository it defaults to:
+
+- `true` in non-production environments
+- `false` in production unless explicitly enabled
+
+### Authentication
+
+- Public read tools can be called anonymously.
+- Protected tools require a bearer token on each call.
+- The MCP auth bridge uses the same Better Auth session resolution logic as the REST app and prefers `Authorization: Bearer ...` over cookies when both are present.
+
+### Tool naming
+
+Tools are domain-prefixed for predictable prompting, for example:
+
+- `collections.list`
+- `collections.inviteMember`
+- `media.create`
+- `users.getMe`
+
+### Quick start
+
+1. Start the backend with `bun run dev`.
+2. Point your MCP client to `http://localhost:3000/mcp`.
+3. Include a bearer token for protected tools.
+4. Use `bun run mcp:stdio` for local assistant integrations that prefer stdio.
+
+Additional setup notes, example calls, and rollout guidance live in `docs/mcp.md`.
 
 ---
 
@@ -158,6 +207,7 @@ bun run prisma:seed       # optional: re-seed
 - [x] Users — read, update, public lookup
 - [x] Media — CRUD with access control
 - [x] Collections — CRUD + media linking + member/invitation management
+- [x] MCP server for collections/media/users collaboration workflows
 - [x] Pagination, filtering, sorting on listing endpoints
 - [x] Zod validation on all request bodies and query params
 - [x] Better Auth integration

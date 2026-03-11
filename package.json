@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "bun --hot run backend/src/index.ts",
     "test": "bun test",
+    "mcp:dev": "bun --hot run backend/src/index.ts",
+    "mcp:stdio": "bun run backend/src/mcp/stdio.ts",
+    "mcp:test": "bun test backend/src/mcp/**/*.test.ts",
     "build": "bun run build:tsc",
     "build:tsc": "tsc --project backend/tsconfig.json",
     "start": "bun run build/index.js",
@@ -19,7 +22,7 @@
     "dev:stack": "bun run setup:db && timeout /t 2 /nobreak && bun run setup:env && bun install && bun run prisma:generate && bun run prisma:seed && bun run dev"
   },
   "resolutions": {
-    "hono": "^4.11.9",
+    "hono": "^4.12.7",
     "lodash": ">=4.17.22"
   },
   "devDependencies": {
@@ -35,6 +38,7 @@
     "@hono/node-server": "^1.19.11",
     "@hono/standard-validator": "^0.2.2",
     "@hono/swagger-ui": "^0.6.0",
+    "@modelcontextprotocol/sdk": "1.27.1",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "@types/node": "^25.4.0",
