@@ -197,7 +197,7 @@ bun run openapi:generate
 - ❌ Sub-collections
 - ❌ Watch priority
 - ❌ Docker setup
-- ❌ CI/CD pipeline
+- ✅ CI/CD pipeline (GitHub Actions validation, artifact delivery, CodeQL)
 - ❌ Front-end
 
 **P4 (Bonus Bonus):**
@@ -259,7 +259,6 @@ bun run openapi:generate
 
 **P3+ Priority (Future Enhancements):**
 - Docker setup
-- CI/CD
 - Front-end
 - Sub-collections
 - External API integrations

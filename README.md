@@ -225,7 +225,7 @@ bun run prisma:seed       # optional: re-seed
 ### P3 (bonus)
 - [ ] Sub-collections
 - [ ] Watch priority
-- [ ] CI/CD
+- [x] CI/CD
 - [ ] Front-end
 
 ### P4 (bonus bonus)
