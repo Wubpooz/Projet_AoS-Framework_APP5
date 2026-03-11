@@ -3,8 +3,6 @@
 A REST API backend for managing cross-platform media watch lists. Users can create collections of movies, shows, books, or articles, share them with others, and manage who can view or edit them.
 
 
-# TODO ADD MCP
-
 ## What's been built
 
 - **Authentication** — register, login, logout, forgot/reset password via [Better Auth](https://github.com/better-auth/better-auth). Session tokens are returned in the `set-auth-token` response header.
