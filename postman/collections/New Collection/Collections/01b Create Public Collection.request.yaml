@@ -1,5 +1,4 @@
 $kind: http-request
-name: 01b Create Public Collection
 url: "{{baseUrl}}/api/collections"
 method: POST
 headers:
@@ -27,5 +26,4 @@ scripts:
         console.log('Saved collectionId:', jsonData.id);
       }
     language: text/javascript
-examples: ./.resources\01b Create Public Collection.resources\examples
 order: 1876
