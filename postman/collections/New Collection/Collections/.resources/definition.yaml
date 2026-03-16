@@ -1,0 +1,19 @@
+$kind: collection
+name: Collections
+description: Collection management endpoints - CRUD operations for collections, media management, and member invitations
+order: 5
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: http:afterResponse
+    language: text/javascript
+    code: |-
+      // Default test for all collection requests
+      pm.test('Response is JSON', () => {
+        if (pm.response.code !== 204) {
+          pm.response.to.have.header('Content-Type', /application\/json/);
+        }
+      });

@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'OpenAPI Document'
+method: GET
+url: '{{baseUrl}}/openapi'
+order: 4000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

@@ -13,6 +13,9 @@ import prisma from './db/index';
 import { authRoutes } from './routes/auth.routes.ts';
 import { userRoutes } from './routes/user.routes';
 import { mediaRoutes } from './routes/media.routes';
+import { collectionRoutes } from './routes/collection.routes';
+import { createMcpRoutes } from './mcp';
+import env from '../env';
 
 
 
@@ -61,9 +64,9 @@ app.use(
 	"*", // CORS enabled for all routes (required for Swagger UI)
 	cors({
 		origin: "http://localhost:3000",
-		allowHeaders: ["Content-Type", "Authorization"],
+    allowHeaders: ["Content-Type", "Authorization", "MCP-Protocol-Version", "Mcp-Session-Id", "Last-Event-ID"],
 		allowMethods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
-		exposeHeaders: ["Content-Length", "set-auth-token"],
+    exposeHeaders: ["Content-Length", "set-auth-token", "MCP-Protocol-Version", "Mcp-Session-Id"],
 		maxAge: 600,
 		credentials: true
 	})
@@ -93,6 +96,11 @@ const rootHandler = (c: any) => {
     name: 'Media Collection API',
     version: '1.0.0',
     docs: '/openapi',
+    mcp: {
+      enabled: env.MCP_ENABLED,
+      endpoint: env.MCP_ENABLED ? '/mcp' : null,
+      stdioCommand: 'bun run mcp:stdio',
+    },
     status: 'ok',
     message: 'Welcome to the Media Collection API!',
   }, 200);
@@ -118,6 +126,7 @@ app.get(
         { name: 'Auth', description: 'Authentication endpoints' },
         { name: 'Users', description: 'User profile endpoints' },
         { name: 'Media', description: 'Media management endpoints' },
+        { name: 'Collections', description: 'Collection management endpoints' },
       ],
       components: {
         securitySchemes: {
@@ -170,6 +179,10 @@ app.get('/health', async (c) => {
     uptime: process.uptime(),
     requestId: c.get('requestId'),
     dbConnection,
+    mcp: {
+      enabled: env.MCP_ENABLED,
+      endpoint: env.MCP_ENABLED ? '/mcp' : null,
+    },
   }, 200);
 });
 
@@ -177,6 +190,8 @@ app.get('/health', async (c) => {
 app.route('/api/auth', authRoutes);
 app.route('/api/users', userRoutes);
 app.route('/api/media', mediaRoutes);
+app.route('/api/collections', collectionRoutes);
+app.route('/mcp', createMcpRoutes());
 
 // Better-Auth handler for built-in endpoints (OAuth, etc.)
 // Mounted after custom routes - use catch-all for anything not matched above

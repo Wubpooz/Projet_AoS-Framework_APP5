@@ -1,0 +1,23 @@
+$kind: mcp-request
+name: New Request
+transport: sse
+command: ""
+url: "{{baseUrl}}/mcp"
+message: |-
+  {
+    "method": "tools/call",
+    "params": {
+      "name": "collections.list",
+      "arguments": {
+        "page": 1,
+        "pageSize": 20,
+        "sort": "createdAt",
+        "order": "desc"
+      }
+    }
+  }
+settings:
+  strictSSL: false
+  requestTimeout: 0
+  sessionTimeout: 3600000
+order: 1090182075908095

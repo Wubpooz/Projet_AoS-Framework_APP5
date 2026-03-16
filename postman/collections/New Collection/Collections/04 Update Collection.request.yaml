@@ -1,0 +1,23 @@
+$kind: http-request
+name: '04 Update Collection'
+method: PATCH
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 5000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Updated Test Collection",
+      "description": "Updated description",
+      "visibility": "PUBLIC"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

@@ -1,0 +1,26 @@
+$kind: http-request
+name: '04 Update Media'
+method: PATCH
+url: '{{baseUrl}}/api/media/{{mediaId}}'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Inception (Updated)",
+      "description": "Updated description for the movie"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });

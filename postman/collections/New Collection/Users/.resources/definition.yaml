@@ -1,0 +1,9 @@
+$kind: collection
+name: Users
+description: User profile endpoints
+order: 3000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'

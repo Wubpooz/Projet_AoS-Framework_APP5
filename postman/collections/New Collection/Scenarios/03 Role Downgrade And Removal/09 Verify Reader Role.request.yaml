@@ -1,0 +1,21 @@
+$kind: http-request
+name: '09 Verify Reader Role'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}/members'
+order: 9000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      const memberId = pm.collectionVariables.get('memberId');
+      pm.expect(jsonData.some((member) => member.id === memberId && member.role === 'READER')).to.equal(true);

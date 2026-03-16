@@ -1,0 +1,48 @@
+name: Media Collection API
+values:
+  - key: baseUrl
+    value: 'http://localhost:3000'
+    enabled: true
+  - key: ownerEmail
+    value: owner@example.com
+    enabled: true
+  - key: ownerPassword
+    value: F1TzjRpy9XLc7kXA4MA
+    enabled: true
+  - key: inviteeEmail
+    value: invitee@example.com
+    enabled: true
+  - key: inviteePassword
+    value: F1TzjRpy9XLc7kXA4MA
+    enabled: true
+  - key: ownerToken
+    value: ''
+    enabled: true
+  - key: inviteeToken
+    value: ''
+    enabled: true
+  - key: ownerUserId
+    value: ''
+    enabled: true
+  - key: inviteeUserId
+    value: ''
+    enabled: true
+  - key: publicUserId
+    value: ''
+    enabled: true
+  - key: collectionId
+    value: ''
+    enabled: true
+  - key: mediaId
+    value: ''
+    enabled: true
+  - key: collectionMediaId
+    value: ''
+    enabled: true
+  - key: memberId
+    value: ''
+    enabled: true
+  - key: resetToken
+    value: ''
+    enabled: true
+color: 240

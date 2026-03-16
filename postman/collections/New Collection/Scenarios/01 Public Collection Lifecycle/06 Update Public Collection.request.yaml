@@ -1,0 +1,28 @@
+$kind: http-request
+name: '06 Update Public Collection'
+method: PATCH
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 6000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Updated Public Scenario Collection",
+      "description": "Updated during scenario 01",
+      "visibility": "PUBLIC"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

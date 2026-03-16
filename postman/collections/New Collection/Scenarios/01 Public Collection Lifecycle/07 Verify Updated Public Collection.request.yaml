@@ -1,0 +1,17 @@
+$kind: http-request
+name: '07 Verify Updated Public Collection'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 7000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      pm.expect(jsonData.name).to.equal('Updated Public Scenario Collection');

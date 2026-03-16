@@ -1,0 +1,24 @@
+$kind: http-request
+name: '04 Get User Public Collections'
+method: GET
+url: '{{baseUrl}}/api/users/{{publicUserId}}/collections'
+order: 4000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      pm.test('Collections array exists', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.have.property('collections');
+        pm.expect(jsonData.collections).to.be.an('array');
+      });

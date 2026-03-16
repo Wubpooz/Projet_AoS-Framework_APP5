@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Root Info'
+method: GET
+url: '{{baseUrl}}/'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

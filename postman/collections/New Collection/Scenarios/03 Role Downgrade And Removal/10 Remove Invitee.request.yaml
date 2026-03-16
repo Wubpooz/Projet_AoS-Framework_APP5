@@ -1,0 +1,17 @@
+$kind: http-request
+name: '10 Remove Invitee'
+method: DELETE
+url: '{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}'
+order: 10000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

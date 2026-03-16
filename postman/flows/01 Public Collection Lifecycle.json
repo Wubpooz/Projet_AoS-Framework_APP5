@@ -1,0 +1,1284 @@
+{
+  "version": 1,
+  "name": "01 Public Collection Lifecycle",
+  "description": "Flow scenario for a complete public collection lifecycle in Postman Local View.",
+  "flow": {
+    "description": "Scenario steps:\n1. Register a temporary owner user.\n2. Log in and capture the session token.\n3. Create a PUBLIC collection.\n4. List collections anonymously and verify the new collection appears.\n5. Fetch the collection anonymously.\n6. Update the collection metadata.\n7. Verify the updated collection publicly.\n8. Delete the collection for cleanup.\n\nRecommended collection requests: Auth/01-03 and Collections/01-04,16.",
+    "nodes": {
+      "oN7WBzcm": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 72,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "eb6f549B141E433A9f220b0a",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "01 Register Owner",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "IYk7LM8i",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl",
+              "latch": false,
+              "isExtraneous": false
+            },
+            {
+              "id": "mQdtIbM0",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerEmail",
+              "latch": false,
+              "isExtraneous": false
+            },
+            {
+              "id": "btzLcs2n",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerPassword",
+              "latch": false,
+              "isExtraneous": false
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "tdHIAXL-"
+      },
+      "Y1L9Whax": {
+        "type": "TERMINAL",
+        "pos": {
+          "x": 984,
+          "y": 472
+        },
+        "config": {},
+        "ui": {
+          "data": {}
+        },
+        "group": "tdHIAXL-"
+      },
+      "2rfV2GWm": {
+        "type": "ev/endpoint@3",
+        "pos": {
+          "x": -184,
+          "y": -104
+        },
+        "config": {
+          "inputs": [],
+          "data": "",
+          "language": "json",
+          "allowAnyType": false,
+          "inputs__expanded": true
+        },
+        "ui": {
+          "data": {
+            "triggerType": "ev/endpoint@3"
+          },
+          "namedInputsExpanded": true
+        }
+      },
+      "sAwMib9_": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 984,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "dDdA4a5847dEcc2ebada9A6B",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "03 Login Owner",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "zqexPU2S",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "5OuL2sPK",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerEmail"
+            },
+            {
+              "id": "4kzluhIg",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerPassword"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "tdHIAXL-"
+      },
+      "rQ7umI5I": {
+        "type": "ev/output@2",
+        "pos": {
+          "x": 7208,
+          "y": 696
+        },
+        "config": {
+          "outputs": [
+            {
+              "id": "WtZJi1V_",
+              "type": "TYPE_BOOLEAN",
+              "kind": "boolean",
+              "value": true,
+              "key": "Output 1",
+              "__noIn": true
+            },
+            {
+              "id": "29ykEqMr",
+              "type": "value/reference@2",
+              "kind": "reference",
+              "value": "",
+              "key": "Output 2",
+              "__noIn": true
+            }
+          ],
+          "outputs__expanded": true
+        },
+        "ui": {
+          "data": {
+            "outputType": "ev/output@2"
+          },
+          "namedInputsExpanded": true
+        }
+      },
+      "ZCwID2ih": {
+        "type": "logic/if@2",
+        "pos": {
+          "x": 496,
+          "y": 168
+        },
+        "size": {
+          "width": 248,
+          "height": 64
+        },
+        "config": {
+          "language": "ts",
+          "query": "",
+          "tscript": "status === 422",
+          "variables": [
+            {
+              "id": "i6PCMNUb",
+              "type": "value/reference@2",
+              "kind": "reference",
+              "value": "http.status",
+              "key": "status",
+              "__noIn": true
+            }
+          ],
+          "variables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true
+        },
+        "group": "tdHIAXL-"
+      },
+      "IqoyYqtF": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 1728,
+          "y": -184
+        },
+        "config": {
+          "element": {
+            "id": "f018A9e79aEcaE2F0DAf11A4",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "01b Create Public Collection",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "gyK5TEUi",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "T_qG-tSV",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerToken"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "h017h0DD": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 1784,
+          "y": 632
+        },
+        "config": {
+          "element": {
+            "id": "EA60eA414Fc77eeaD1088df4",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "02 List Collections",
+            "method": "GET"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "VU6yUAzw",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true
+        }
+      },
+      "HZR14f_N": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 2632,
+          "y": 632
+        },
+        "config": {
+          "element": {
+            "id": "8379F946262f9AdFf57d4956",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "03 Get Collection By Id",
+            "method": "GET"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "BEDr_YkM",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "Ld2E9PSY",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "collectionId",
+              "__noIn": true
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "vEhoTChi": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 3000,
+          "y": 632
+        },
+        "config": {
+          "element": {
+            "id": "48a9EEc1b3bE2872dC08DF13",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "04 Update Collection",
+            "method": "PATCH"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "zfeeL7-w",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerToken"
+            },
+            {
+              "id": "WK2iuG1o",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "bq-OBTm5",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "collectionId"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "zd1TeXec": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 3440,
+          "y": 632
+        },
+        "config": {
+          "element": {
+            "id": "8379F946262f9AdFf57d4956",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "03 Get Collection By Id",
+            "method": "GET"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "BEDr_YkM",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "Ld2E9PSY",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "collectionId"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "xZDHx-qT": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 4352,
+          "y": 632
+        },
+        "config": {
+          "element": {
+            "id": "Be1dB9E0Bb9Cc2def98c4944",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "16 Delete Collection",
+            "method": "DELETE"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "51hVrZAU",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerToken"
+            },
+            {
+              "id": "2kQDI5zJ",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "w1feHCel",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "collectionId"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "4SPuV7bI": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 6752,
+          "y": 656
+        },
+        "config": {
+          "element": {
+            "id": "Be1dB9E0Bb9Cc2def98c4944",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "16 Delete Collection",
+            "method": "DELETE"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "51hVrZAU",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerToken"
+            },
+            {
+              "id": "2kQDI5zJ",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "w1feHCel",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "collectionId"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "Eg5NTq01": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 2808,
+          "y": -184
+        },
+        "config": {
+          "element": {
+            "id": "5E439be8F888aF62Da1cdbaF",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "08 Logout",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "2z0tOHgf",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerToken"
+            },
+            {
+              "id": "cZf_RMbM",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        }
+      },
+      "XlQ8PldY": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 72,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "D80E640FB85DadD47f07ecd3",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "02 Register Invitee",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "IYk7LM8i",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl",
+              "latch": false,
+              "isExtraneous": false
+            },
+            {
+              "id": "AEtpFBYP",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "inviteeEmail"
+            },
+            {
+              "id": "sDiNIJKS",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "inviteePassword"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "nF9s5fcA"
+      },
+      "2CigXFMS": {
+        "type": "TERMINAL",
+        "pos": {
+          "x": 984,
+          "y": 472
+        },
+        "config": {},
+        "ui": {
+          "data": {}
+        },
+        "group": "nF9s5fcA"
+      },
+      "onZ7-6qI": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 984,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "C5B767adCCeABb430f865CE0",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "04 Login Invitee",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "zqexPU2S",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "FXRZFpXS",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "inviteeEmail"
+            },
+            {
+              "id": "kWekO-DM",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "inviteePassword"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "nF9s5fcA"
+      },
+      "bKlvLrpW": {
+        "type": "logic/if@2",
+        "pos": {
+          "x": 528,
+          "y": 88
+        },
+        "size": {
+          "width": 248,
+          "height": 64
+        },
+        "config": {
+          "language": "ts",
+          "query": "",
+          "tscript": "status === 422",
+          "variables": [
+            {
+              "id": "i6PCMNUb",
+              "type": "value/reference@2",
+              "kind": "reference",
+              "value": "http.status",
+              "key": "status",
+              "__noIn": true
+            }
+          ],
+          "variables__expanded": true
+        },
+        "ui": {
+          "data": {
+            "blockTitle": "If 1"
+          },
+          "namedInputsExpanded": true
+        },
+        "group": "nF9s5fcA"
+      },
+      "D2MYwCc6": {
+        "type": "output/viewer@1",
+        "pos": {
+          "x": 3848,
+          "y": 680
+        },
+        "size": {
+          "width": 328,
+          "height": 232
+        },
+        "config": {},
+        "ui": {
+          "data": {
+            "displayType": "auto"
+          }
+        }
+      },
+      "kDvwrja4": {
+        "type": "output/viewer@1",
+        "pos": {
+          "x": 2264,
+          "y": -136
+        },
+        "size": {
+          "width": 328,
+          "height": 232
+        },
+        "config": {},
+        "ui": {
+          "data": {
+            "displayType": "auto",
+            "genericLabel": "Display 1"
+          }
+        }
+      },
+      "fp9_7zS7": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 72,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "eb6f549B141E433A9f220b0a",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "01 Register Owner",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "IYk7LM8i",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl",
+              "latch": false,
+              "isExtraneous": false
+            },
+            {
+              "id": "mQdtIbM0",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerEmail",
+              "latch": false,
+              "isExtraneous": false
+            },
+            {
+              "id": "btzLcs2n",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerPassword",
+              "latch": false,
+              "isExtraneous": false
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "YOV--_WE"
+      },
+      "jCoCGd5L": {
+        "type": "TERMINAL",
+        "pos": {
+          "x": 984,
+          "y": 472
+        },
+        "config": {},
+        "ui": {
+          "data": {}
+        },
+        "group": "YOV--_WE"
+      },
+      "jVZ3gBJZ": {
+        "type": "task/http-request@1",
+        "pos": {
+          "x": 984,
+          "y": 56
+        },
+        "config": {
+          "element": {
+            "id": "dDdA4a5847dEcc2ebada9A6B",
+            "collection": "39ee7FAa1a3cC73C122e20fA",
+            "inExtensibleCollection": true,
+            "name": "03 Login Owner",
+            "method": "POST"
+          },
+          "environment": "5beced70-11f9-5a22-ab65-63c5de7348a3",
+          "parseBody": "auto",
+          "requestVariables": [
+            {
+              "id": "zqexPU2S",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "baseUrl"
+            },
+            {
+              "id": "5OuL2sPK",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerEmail"
+            },
+            {
+              "id": "4kzluhIg",
+              "type": null,
+              "kind": null,
+              "value": null,
+              "key": "ownerPassword"
+            }
+          ],
+          "scriptsModifyEnvVars": true,
+          "trackGlobalEnvironment": false,
+          "requestVariables__expanded": true
+        },
+        "ui": {
+          "data": {},
+          "namedInputsExpanded": true,
+          "requestVariablesExpanded": false
+        },
+        "group": "YOV--_WE"
+      },
+      "FfmXCBIA": {
+        "type": "logic/if@2",
+        "pos": {
+          "x": 496,
+          "y": 168
+        },
+        "size": {
+          "width": 248,
+          "height": 64
+        },
+        "config": {
+          "language": "ts",
+          "query": "",
+          "tscript": "status === 422",
+          "variables": [
+            {
+              "id": "i6PCMNUb",
+              "type": "value/reference@2",
+              "kind": "reference",
+              "value": "http.status",
+              "key": "status",
+              "__noIn": true
+            }
+          ],
+          "variables__expanded": true
+        },
+        "ui": {
+          "data": {
+            "blockTitle": "If 2"
+          },
+          "namedInputsExpanded": true
+        },
+        "group": "YOV--_WE"
+      },
+      "YwTI1PM6": {
+        "type": "TERMINAL",
+        "pos": {
+          "x": 4880,
+          "y": 536
+        },
+        "config": {},
+        "ui": {
+          "data": {}
+        }
+      },
+      "rR-plZWC": {
+        "type": "logic/manipulate@1",
+        "pos": {
+          "x": 3296,
+          "y": -144
+        },
+        "size": {
+          "width": 304,
+          "height": 104
+        },
+        "config": {
+          "language": "ts",
+          "query": "",
+          "tscript": "//remove ownerToken if exist in the env",
+          "variables": [
+            {
+              "id": "2-alnGMh",
+              "type": "value/reference@2",
+              "kind": "reference",
+              "value": "",
+              "key": "value1",
+              "__noIn": true
+            }
+          ],
+          "variables__expanded": true
+        },
+        "ui": {
+          "data": {
+            "blockTitle": "Evaluate 1"
+          },
+          "namedInputsExpanded": true
+        }
+      },
+      "iTbJlnCS": {
+        "type": "output/viewer@1",
+        "pos": {
+          "x": 2200,
+          "y": 680
+        },
+        "size": {
+          "width": 328,
+          "height": 232
+        },
+        "config": {},
+        "ui": {
+          "data": {
+            "displayType": "auto",
+            "genericLabel": "Display 2"
+          }
+        }
+      }
+    },
+    "connections": {
+      "wdGUjYII": {
+        "source": "2rfV2GWm",
+        "target": "oN7WBzcm",
+        "sourcePort": "data",
+        "targetPort": "AI"
+      },
+      "i0IzHldu": {
+        "source": "oN7WBzcm",
+        "target": "sAwMib9_",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "PTseYrY4": {
+        "source": "oN7WBzcm",
+        "target": "ZCwID2ih",
+        "sourcePort": "fail",
+        "targetPort": "variables|i6PCMNUb"
+      },
+      "vorbtAbx": {
+        "source": "ZCwID2ih",
+        "target": "sAwMib9_",
+        "sourcePort": "then",
+        "targetPort": "AI"
+      },
+      "WSo1dxzC": {
+        "source": "ZCwID2ih",
+        "target": "Y1L9Whax",
+        "sourcePort": "else",
+        "targetPort": "data"
+      },
+      "cLlvIAk4": {
+        "source": "sAwMib9_",
+        "target": "IqoyYqtF",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "W3N6ErWA": {
+        "source": "XlQ8PldY",
+        "target": "onZ7-6qI",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "GxwcbING": {
+        "source": "XlQ8PldY",
+        "target": "bKlvLrpW",
+        "sourcePort": "fail",
+        "targetPort": "variables|i6PCMNUb"
+      },
+      "BJSR9N94": {
+        "source": "bKlvLrpW",
+        "target": "onZ7-6qI",
+        "sourcePort": "then",
+        "targetPort": "AI"
+      },
+      "goU9sDka": {
+        "source": "bKlvLrpW",
+        "target": "2CigXFMS",
+        "sourcePort": "else",
+        "targetPort": "data"
+      },
+      "edhBKuoq": {
+        "source": "onZ7-6qI",
+        "target": "h017h0DD",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "cYr_O3jt": {
+        "source": "HZR14f_N",
+        "target": "vEhoTChi",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "4CVFqfdz": {
+        "source": "vEhoTChi",
+        "target": "zd1TeXec",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "KnsBgNxk": {
+        "source": "zd1TeXec",
+        "target": "D2MYwCc6",
+        "sourcePort": "success",
+        "targetPort": "data"
+      },
+      "TZt5g_vg": {
+        "source": "IqoyYqtF",
+        "target": "kDvwrja4",
+        "sourcePort": "success",
+        "targetPort": "data"
+      },
+      "NV6coduS": {
+        "source": "kDvwrja4",
+        "target": "Eg5NTq01",
+        "sourcePort": "data",
+        "targetPort": "AI"
+      },
+      "JkMmKjed": {
+        "source": "D2MYwCc6",
+        "target": "xZDHx-qT",
+        "sourcePort": "data",
+        "targetPort": "AI"
+      },
+      "tMWipDIA": {
+        "source": "fp9_7zS7",
+        "target": "jVZ3gBJZ",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "-9GqWJLi": {
+        "source": "fp9_7zS7",
+        "target": "FfmXCBIA",
+        "sourcePort": "fail",
+        "targetPort": "variables|i6PCMNUb"
+      },
+      "bra07MK-": {
+        "source": "FfmXCBIA",
+        "target": "jVZ3gBJZ",
+        "sourcePort": "then",
+        "targetPort": "AI"
+      },
+      "yDiWwEtu": {
+        "source": "FfmXCBIA",
+        "target": "jCoCGd5L",
+        "sourcePort": "else",
+        "targetPort": "data"
+      },
+      "_cGBErIW": {
+        "source": "xZDHx-qT",
+        "target": "fp9_7zS7",
+        "sourcePort": "fail",
+        "targetPort": "AI"
+      },
+      "TILeA_jQ": {
+        "source": "xZDHx-qT",
+        "target": "YwTI1PM6",
+        "sourcePort": "success",
+        "targetPort": "data"
+      },
+      "zPmMOX1S": {
+        "source": "jVZ3gBJZ",
+        "target": "4SPuV7bI",
+        "sourcePort": "success",
+        "targetPort": "AI"
+      },
+      "8yQdoTrR": {
+        "source": "rQ7umI5I",
+        "sourcePort": "out|WtZJi1V_",
+        "target": "WepD_WvK",
+        "targetPort": "@"
+      },
+      "BlfJ7syE": {
+        "source": "rR-plZWC",
+        "sourcePort": "out",
+        "target": "XlQ8PldY",
+        "targetPort": "AI"
+      },
+      "HQ6p9wz2": {
+        "source": "Eg5NTq01",
+        "target": "rR-plZWC",
+        "sourcePort": "success",
+        "targetPort": "variables|2-alnGMh"
+      },
+      "ajBJ0EK1": {
+        "source": "4SPuV7bI",
+        "target": "rQ7umI5I",
+        "sourcePort": "success",
+        "targetPort": "outputs|29ykEqMr"
+      },
+      "WE0h28gP": {
+        "source": "rQ7umI5I",
+        "sourcePort": "out|29ykEqMr",
+        "target": "IpbX-Asf",
+        "targetPort": "@"
+      },
+      "zKzU0qi_": {
+        "source": "h017h0DD",
+        "target": "iTbJlnCS",
+        "sourcePort": "success",
+        "targetPort": "data"
+      },
+      "yhdc_quJ": {
+        "source": "iTbJlnCS",
+        "target": "HZR14f_N",
+        "sourcePort": "data",
+        "targetPort": "AI"
+      }
+    },
+    "annotations": {
+      "NHa59WN0": {
+        "type": "annotation/text@1",
+        "pos": {
+          "x": 2256,
+          "y": 632
+        },
+        "position": "absolute",
+        "ui": {
+          "data": {},
+          "size": {
+            "width": 163,
+            "height": 0
+          }
+        },
+        "message": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GET THE COLLECTION’s ID"
+                }
+              ]
+            }
+          ]
+        },
+        "format": "tiptap",
+        "width": 163
+      }
+    },
+    "groups": {
+      "tdHIAXL-": {
+        "ui": {
+          "pos": {
+            "x": 192,
+            "y": -240
+          },
+          "size": {
+            "width": 1328,
+            "height": 560
+          },
+          "color": "pink"
+        },
+        "header": {
+          "title": "Auth - Owner"
+        }
+      },
+      "nF9s5fcA": {
+        "ui": {
+          "pos": {
+            "x": 160,
+            "y": 576
+          },
+          "size": {
+            "width": 1328,
+            "height": 560
+          },
+          "color": "teal"
+        },
+        "header": {
+          "title": "Auth - Invite"
+        }
+      },
+      "YOV--_WE": {
+        "ui": {
+          "pos": {
+            "x": 5216,
+            "y": 600
+          },
+          "size": {
+            "width": 1328,
+            "height": 560
+          },
+          "color": "pink"
+        },
+        "header": {
+          "title": "Auth - Owner"
+        }
+      }
+    },
+    "webhook": {
+      "payloadContent": "body-only",
+      "responseType": "default"
+    },
+    "forms": {},
+    "modules": {},
+    "io": {
+      "WepD_WvK": {
+        "type": "output",
+        "name": "Output 1",
+        "typeDef": {}
+      },
+      "IpbX-Asf": {
+        "type": "output",
+        "name": "Output 2",
+        "typeDef": {}
+      }
+    },
+    "ports": {},
+    "meta": {
+      "scenarioType": "collection-lifecycle",
+      "visibility": "PUBLIC"
+    },
+    "scenes": {},
+    "scenarios": {
+      "3BlBopDa": {
+        "name": "Start Trigger",
+        "type": "scenario@2",
+        "createdOn": 1773163296807,
+        "updatedOn": 1773163296807,
+        "data": {
+          "93-oNMSH": {
+            "id": "93-oNMSH",
+            "key": "Input 1",
+            "value": "",
+            "type": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "config": {
+      "definitions": {},
+      "constants": {}
+    }
+  },
+  "lockbox": {},
+  "info": {
+    "_postman_id": "d86a9c1a-1763-435b-9ed7-93695a750b6e"
+  },
+  "_postman_exported_at": "2026-03-13T08:35:12.891Z",
+  "_postman_exported_using": "Postman/Local Mode"
+}

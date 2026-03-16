@@ -1,0 +1,32 @@
+$kind: http-request
+name: '06 Invite Invitee As Collaborator'
+method: POST
+url: '{{baseUrl}}/api/collections/{{collectionId}}/members'
+order: 6000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "userId": "{{inviteeUserId}}",
+      "role": "COLLABORATOR"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+      
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('memberId', jsonData.id);
+      }

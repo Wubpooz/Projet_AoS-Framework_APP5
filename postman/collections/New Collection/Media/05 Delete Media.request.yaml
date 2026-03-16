@@ -1,0 +1,13 @@
+$kind: http-request
+name: '05 Delete Media'
+method: DELETE
+url: '{{baseUrl}}/api/media/{{mediaId}}'
+order: 5000
+description: 'Note: Run this at the end to clean up. Creates a new media first if needed.'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

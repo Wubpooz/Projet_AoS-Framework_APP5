@@ -1,0 +1,21 @@
+$kind: http-request
+name: '03 Get Collection By Id'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 4000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+
+      pm.test('Collection has required fields', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.have.property('id');
+        pm.expect(jsonData).to.have.property('name');
+        pm.expect(jsonData).to.have.property('visibility');
+      });

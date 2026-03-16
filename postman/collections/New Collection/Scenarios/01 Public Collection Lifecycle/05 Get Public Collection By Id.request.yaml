@@ -1,0 +1,17 @@
+$kind: http-request
+name: '05 Get Public Collection By Id'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 5000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      pm.expect(jsonData.visibility).to.equal('PUBLIC');

@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "flows": {
+    "5c8ba3e8-512b-43d1-b5f5-b93eb7d04a2d": {
+      "path": "C:/Users/mathi/Documents/GitHub/Projet_AoS_APP5/postman/flows/02 Private Invitation Acceptance.json",
+      "dependencies": []
+    },
+    "4df963cb-da2c-4db4-b6c6-fb11159e2131": {
+      "path": "C:/Users/mathi/Documents/GitHub/Projet_AoS_APP5/postman/flows/03 Role Downgrade And Removal.json",
+      "dependencies": []
+    },
+    "d86a9c1a-1763-435b-9ed7-93695a750b6e": {
+      "path": "C:/Users/mathi/Documents/GitHub/Projet_AoS_APP5/postman/flows/01 Public Collection Lifecycle.json",
+      "dependencies": [
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "eb6f549B141E433A9f220b0a",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "dDdA4a5847dEcc2ebada9A6B",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "EA60eA414Fc77eeaD1088df4",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "8379F946262f9AdFf57d4956",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "48a9EEc1b3bE2872dC08DF13",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "Be1dB9E0Bb9Cc2def98c4944",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "5E439be8F888aF62Da1cdbaF",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "D80E640FB85DadD47f07ecd3",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "C5B767adCCeABb430f865CE0",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        },
+        {
+          "local": {
+            "collectionId": "39ee7FAa1a3cC73C122e20fA",
+            "requestId": "f018A9e79aEcaE2F0DAf11A4",
+            "filePath": ""
+          },
+          "cloud": {
+            "collectionId": null,
+            "requestId": null
+          }
+        }
+      ]
+    }
+  }
+}

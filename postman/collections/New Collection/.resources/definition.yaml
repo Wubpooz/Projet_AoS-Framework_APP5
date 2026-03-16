@@ -1,0 +1,17 @@
+$kind: collection
+name: Media Collection API
+description: A complete API test collection for managing media collections
+  (movies, TV shows, books, etc.)
+variables:
+  baseUrl: http://localhost:3000
+  ownerEmail: owner@example.com
+  ownerPassword: F1TzjRpy9XLc7kXA4MA
+  inviteeEmail: invitee@example.com
+  inviteePassword: F1TzjRpy9XLc7kXA4MA
+  ownerToken: ""
+  inviteeToken: ""
+  ownerUserId: ""
+  inviteeUserId: ""
+  publicUserId: ""
+  mediaId: ""
+  resetToken: ""

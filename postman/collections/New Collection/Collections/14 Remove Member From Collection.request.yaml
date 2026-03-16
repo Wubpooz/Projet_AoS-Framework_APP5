@@ -1,0 +1,13 @@
+$kind: http-request
+name: '14 Remove Member From Collection'
+method: DELETE
+url: '{{baseUrl}}/api/collections/{{collectionId}}/members/{{memberId}}'
+order: 15000
+description: Remove the member from the collection (owner only)
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

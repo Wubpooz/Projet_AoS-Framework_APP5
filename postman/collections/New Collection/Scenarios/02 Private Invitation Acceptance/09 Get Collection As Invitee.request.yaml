@@ -1,0 +1,20 @@
+$kind: http-request
+name: '09 Get Collection As Invitee'
+method: GET
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 9000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{inviteeToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      pm.expect(jsonData.visibility).to.equal('PRIVATE');

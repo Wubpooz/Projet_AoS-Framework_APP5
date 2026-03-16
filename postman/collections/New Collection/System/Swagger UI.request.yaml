@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Swagger UI'
+method: GET
+url: '{{baseUrl}}/docs'
+order: 5000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });

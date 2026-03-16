@@ -1,0 +1,35 @@
+$kind: http-request
+name: '05 Create Media For Collection'
+method: POST
+url: '{{baseUrl}}/api/media'
+order: 6000
+description: Create a media item to add to the collection
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "The Matrix",
+      "description": "A computer hacker learns about the true nature of reality",
+      "type": "FILM",
+      "releaseDate": "1999-03-31T00:00:00.000Z",
+      "directorAuthor": "The Wachowskis",
+      "tags": ["sci-fi", "action"],
+      "platforms": ["HBO Max"]
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', () => {
+        pm.expect(pm.response.code).to.equal(201);
+      });
+
+      // Save media ID for adding to collection
+      const jsonData = pm.response.json();
+      if (jsonData.id) {
+        pm.collectionVariables.set('mediaId', jsonData.id);
+        console.log('Saved mediaId for collection:', jsonData.id);
+      }

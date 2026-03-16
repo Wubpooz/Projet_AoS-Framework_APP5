@@ -2,6 +2,7 @@ const env = {
   PORT: process.env.PORT || 3000,
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/mydb',
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:4200',
+  MCP_ENABLED: (process.env.MCP_ENABLED ?? (process.env.NODE_ENV !== 'production' ? 'true' : 'false')) === 'true',
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || 'your-secret-key',
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID || '',

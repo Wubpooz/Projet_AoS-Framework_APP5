@@ -7,10 +7,9 @@
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["*"],
-      "@": ["."]
+      "@/*": ["./src/*"],
+      "@": ["./src"]
     },
 
     // Bundler mode

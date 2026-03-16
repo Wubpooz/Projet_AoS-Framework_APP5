@@ -1,0 +1,26 @@
+$kind: http-request
+name: '05 Get Session Info'
+method: GET
+url: '{{baseUrl}}/api/auth/me'
+order: 5000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{ownerToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      pm.test('Response is JSON', () => {
+        pm.response.to.have.header('Content-Type', /application\/json/);
+      });
+      
+      pm.test('User object exists', () => {
+        const jsonData = pm.response.json();
+        pm.expect(jsonData).to.have.property('user');
+      });

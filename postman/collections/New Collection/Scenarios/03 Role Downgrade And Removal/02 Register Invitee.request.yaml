@@ -1,0 +1,28 @@
+$kind: http-request
+name: '02 Register Invitee'
+method: POST
+url: '{{baseUrl}}/api/auth/register'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{inviteeEmail}}",
+      "password": "{{inviteePassword}}",
+      "name": "Invitee User"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const json = pm.response.json();
+      if (json.user?.id) {
+        pm.collectionVariables.set('inviteeUserId', json.user.id);
+      }

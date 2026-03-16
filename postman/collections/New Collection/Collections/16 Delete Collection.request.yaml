@@ -1,0 +1,18 @@
+$kind: http-request
+name: '16 Delete Collection'
+method: DELETE
+url: '{{baseUrl}}/api/collections/{{collectionId}}'
+order: 17000
+description: Delete the collection (owner only) - Run this at the end to clean up
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+
+      // Clear collection variables after cleanup
+      pm.collectionVariables.unset('collectionId');
+      pm.collectionVariables.unset('collectionMediaId');
+      pm.collectionVariables.unset('memberId');

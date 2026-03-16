@@ -1,0 +1,32 @@
+$kind: http-request
+name: '04 Login Invitee'
+method: POST
+url: '{{baseUrl}}/api/auth/login'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{inviteeEmail}}",
+      "password": "{{inviteePassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', () => {
+        pm.expect(pm.response.code).to.equal(200);
+      });
+      
+      const jsonData = pm.response.json();
+      if (jsonData.sessionToken) {
+        pm.collectionVariables.set('inviteeToken', jsonData.sessionToken);
+      }
+      
+      const authHeader = pm.response.headers.get('set-auth-token');
+      if (authHeader) {
+        pm.collectionVariables.set('inviteeToken', authHeader);
+      }
