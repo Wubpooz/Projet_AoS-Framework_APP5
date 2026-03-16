@@ -1,33 +1,47 @@
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
+# syntax=docker/dockerfile:1.7
+
+# Base image
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+# Install full dependencies (for development/build tasks)
+FROM base AS deps
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
-# install with --production (which excludes devDependencies)
-RUN mkdir -p /temp/prod
-COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+# Install production-only dependencies
+FROM base AS prod-deps
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+# Build context stage (keeps all source files available)
+FROM base AS build
+COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
-# copy production dependencies and source code into final image
-FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/backend/src/index.ts .
-COPY --from=prerelease /usr/src/app/package.json .
+# Ensure Prisma client artifacts are generated in the image
+RUN bun run prisma:generate
 
-# run the app
+# -------------------
+# Development target
+# -------------------
+FROM build AS dev
+ENV NODE_ENV=development
+EXPOSE 3000
 USER bun
-EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "--hot" , "run", "index.ts" ]
+CMD ["bun", "--hot", "run", "backend/src/index.ts"]
+
+# ------------------
+# Production target
+# ------------------
+FROM base AS prod
+ENV NODE_ENV=production
+
+COPY --from=prod-deps /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/backend ./backend
+COPY --from=build /usr/src/app/package.json ./package.json
+COPY --from=build /usr/src/app/bun.lock ./bun.lock
+
+EXPOSE 3000
+USER bun
+CMD ["bun", "run", "backend/src/index.ts"]

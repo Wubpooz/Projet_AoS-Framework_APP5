@@ -14,7 +14,7 @@ A REST API backend for managing cross-platform media watch lists. Users can crea
 - **OpenAPI spec** — auto-generated and served at `/openapi` (JSON) and `/docs` (Scalar UI).
 - **Rate limiting** — basic rate limiter on all routes.
 
-The API is not yet dockerized and there is no front-end. See the progress tracking section at the bottom.
+The API includes a Docker Compose baseline for local containerized execution. There is no front-end. See the progress tracking section at the bottom.
 
 ---
 
@@ -70,8 +70,39 @@ The server runs on `http://localhost:3000` by default. If Postgres isn't reachab
 
 ---
 
-## Running Tests
+## Run with Docker Compose
+This repository includes a local Docker setup (`compose.yaml`) with:
+- `api` (development target, hot reload)
+- `db` (PostgreSQL 16)
+- `api-prod` (optional production-like target via profile)
 
+
+### Start local stack (dev)
+```bash
+docker compose up --build
+```
+The API will be available at `http://localhost:3000` and Postgres at `localhost:5432`.
+
+### Stop stack
+```bash
+docker compose down
+```
+
+To also remove the Postgres volume:
+```bash
+docker compose down -v
+```
+
+### Run production-like API target (optional)
+```bash
+docker compose --profile prod up --build api-prod db
+```
+
+> `api-prod` uses the `prod` target from `Dockerfile` and runs without hot reload.
+
+---
+
+## Running Tests
 Tests use Bun's built-in test runner. Each route file has a corresponding `.test.ts` file.
 
 ```bash
@@ -93,7 +124,6 @@ Tests spin up the Hono app in-process and hit it with `app.request(...)`, so no 
 ---
 
 ## API Documentation
-
 Once the server is running:
 
 - **Scalar UI:** `http://localhost:3000/docs`
@@ -105,18 +135,14 @@ MCP uses its own protocol surface rather than OpenAPI. See `docs/mcp.md` for too
 ---
 
 ## MCP
-
-The backend now exposes a Model Context Protocol server that reuses the same service-layer business logic as the REST routes.
+The backend exposes a Model Context Protocol server that reuses the same service-layer business logic as the REST routes.
 
 ### Transports
-
 - **HTTP / Streamable HTTP:** `http://localhost:3000/mcp`
 - **stdio:** `bun run mcp:stdio`
 
 ### Feature flag
-
 Set `MCP_ENABLED=true` to expose the MCP server. In this repository it defaults to:
-
 - `true` in non-production environments
 - `false` in production unless explicitly enabled
 
@@ -142,16 +168,13 @@ Tools are domain-prefixed for predictable prompting, for example:
 3. Include a bearer token for protected tools.
 4. Use `bun run mcp:stdio` for local assistant integrations that prefer stdio.
 
-Additional setup notes, example calls, and rollout guidance live in `docs/mcp.md`.
 
 ---
 
 ## Postman
-
 The `postman/` folder contains everything needed to test the API manually.
 
 ### Collections
-
 Import the collection from `postman/collections/New Collection/` into Postman (File → Import, select the folder). The collection is organized into folders:
 
 | Folder | What it covers |
@@ -163,11 +186,9 @@ Import the collection from `postman/collections/New Collection/` into Postman (F
 | System | Health check, OpenAPI |
 
 ### Environment
-
 Import `postman/environments/Media Collection API.yaml`. It pre-fills `baseUrl`, test user credentials, and empty slots for `ownerToken`, `inviteeToken`, `collectionId`, etc. that get populated by request scripts as you run through the collection.
 
 ### Scenario testing (recommended)
-
 The easiest and most maintainable way to run end-to-end scenarios is to reuse the existing Postman requests in sequence.
 
 See `docs/postman-testing-guide.md` for three ready-to-run scenario playbooks:
@@ -180,8 +201,8 @@ These scenarios reuse the current request scripts, which already persist tokens 
 
 If you want a one-click Collection Runner workflow, use the prebuilt scenario folders under `postman/collections/New Collection/Scenarios/`.
 
-### Flows (optional)
 
+### Flows (optional)
 Three experimental scenario flows are also kept in `postman/flows/` as reference material for Postman Local View.
 
 They are useful for visual exploration, but the standard request-sequence approach in `docs/postman-testing-guide.md` is the preferred workflow for day-to-day testing and maintenance.
@@ -189,7 +210,6 @@ They are useful for visual exploration, but the standard request-sequence approa
 ---
 
 ## Updating the Schema
-
 ```bash
 # After editing backend/prisma/schema.prisma:
 bun run prisma:generate   # regenerate the client
@@ -200,7 +220,6 @@ bun run prisma:seed       # optional: re-seed
 ---
 
 ## Progress
-
 ### P1
 - [x] Database schema and seeding
 - [x] Auth endpoints (register / login / logout / forgot / reset / me)
@@ -213,7 +232,7 @@ bun run prisma:seed       # optional: re-seed
 - [x] Better Auth integration
 - [x] OpenAPI spec (served live + static copy)
 - [x] Rate limiting
-- [ ] Docker setup
+- [x] Docker setup
 - [x] Postman collection + flows
 
 ### P2
@@ -232,7 +251,9 @@ bun run prisma:seed       # optional: re-seed
 - [ ] Tag/rating-based recommendations
 - [ ] External API integrations (IMDb, Goodreads, etc.)
 
+
 ---
+
 
 ## DataModel
 **Media** (films, séries, livres, articles, etc.) avec des champs tels que:  

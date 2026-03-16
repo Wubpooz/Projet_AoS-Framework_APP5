@@ -1,0 +1,69 @@
+name: aos-app5
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aos-postgres
+    environment:
+      POSTGRES_USER: johndoe
+      POSTGRES_PASSWORD: randompassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U johndoe -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    container_name: aos-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://johndoe:randompassword@db:5432/mydb?schema=public
+      BETTER_AUTH_URL: http://localhost:3000
+      MCP_ENABLED: "true"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/usr/src/app
+      - bun_node_modules:/usr/src/app/node_modules
+    healthcheck:
+      test: ["CMD", "bun", "-e", "const r = await fetch('http://127.0.0.1:3000/health'); if (!r.ok) process.exit(1);"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  api-prod:
+    container_name: aos-api-prod
+    profiles: ["prod"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://johndoe:randompassword@db:5432/mydb?schema=public
+      BETTER_AUTH_URL: http://localhost:3000
+      MCP_ENABLED: "false"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  bun_node_modules:
