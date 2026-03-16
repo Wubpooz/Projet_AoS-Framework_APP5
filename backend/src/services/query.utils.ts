@@ -148,7 +148,7 @@ export const queryUtils = {
           collection: {
             OR: [
               { ownerId: userId },
-              { members: { some: { userId } } },
+              { members: { some: { userId, accepted: true } } },
             ],
           },
         },

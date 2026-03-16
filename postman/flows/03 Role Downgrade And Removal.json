@@ -274,7 +274,7 @@
           "language": "json",
           "allowAnyType": false
         },
-        "ui": { "label": "12. Verify Removed Member Denied (expect 403)", "namedInputsExpanded": false }
+        "ui": { "label": "12. Verify Removed Member Denied (expect 404)", "namedInputsExpanded": false }
       },
       "step13DeleteCollection": {
         "type": "exec/request@1",

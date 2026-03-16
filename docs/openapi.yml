@@ -54,7 +54,9 @@
       "get": {
         "operationId": "getOpenapi",
         "responses": {
-          "200": {}
+          "200": {
+            "description": "OpenAPI specification document"
+          }
         }
       }
     },
@@ -62,7 +64,9 @@
       "get": {
         "operationId": "getDocs",
         "responses": {
-          "200": {}
+          "200": {
+            "description": "Interactive API documentation UI"
+          }
         }
       }
     },
@@ -70,7 +74,9 @@
       "get": {
         "operationId": "getHealth",
         "responses": {
-          "200": {}
+          "200": {
+            "description": "Health check response"
+          }
         }
       }
     },

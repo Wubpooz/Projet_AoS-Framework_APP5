@@ -517,7 +517,72 @@
         }
       }
     },
-    "connections": {},
+    "connections": {
+      "c-start-register-owner": {
+        "src": { "block": "inviteFlowStart", "port": "exec/out" },
+        "dest": { "block": "step1RegisterOwner", "port": "exec/in" }
+      },
+      "c-register-owner-register-invitee": {
+        "src": { "block": "step1RegisterOwner", "port": "exec/out" },
+        "dest": { "block": "step2RegisterInvitee", "port": "exec/in" }
+      },
+      "c-register-invitee-body-extract": {
+        "src": { "block": "step2RegisterInvitee", "port": "response/body" },
+        "dest": { "block": "step2bExtractInviteeId", "port": "vars" }
+      },
+      "c-register-invitee-login-owner": {
+        "src": { "block": "step2RegisterInvitee", "port": "exec/out" },
+        "dest": { "block": "step3LoginOwner", "port": "exec/in" }
+      },
+      "c-login-owner-body-extract": {
+        "src": { "block": "step3LoginOwner", "port": "response/body" },
+        "dest": { "block": "step3bExtractOwnerToken", "port": "vars" }
+      },
+      "c-login-owner-login-invitee": {
+        "src": { "block": "step3LoginOwner", "port": "exec/out" },
+        "dest": { "block": "step4LoginInvitee", "port": "exec/in" }
+      },
+      "c-login-invitee-body-extract": {
+        "src": { "block": "step4LoginInvitee", "port": "response/body" },
+        "dest": { "block": "step4bExtractInviteeToken", "port": "vars" }
+      },
+      "c-login-invitee-create-collection": {
+        "src": { "block": "step4LoginInvitee", "port": "exec/out" },
+        "dest": { "block": "step5CreatePrivateCollection", "port": "exec/in" }
+      },
+      "c-create-collection-body-extract": {
+        "src": { "block": "step5CreatePrivateCollection", "port": "response/body" },
+        "dest": { "block": "step5bExtractCollectionId", "port": "vars" }
+      },
+      "c-create-collection-invite-member": {
+        "src": { "block": "step5CreatePrivateCollection", "port": "exec/out" },
+        "dest": { "block": "step6InviteMember", "port": "exec/in" }
+      },
+      "c-invite-member-list-invitations": {
+        "src": { "block": "step6InviteMember", "port": "exec/out" },
+        "dest": { "block": "step7ListInvitations", "port": "exec/in" }
+      },
+      "c-list-invitations-accept": {
+        "src": { "block": "step7ListInvitations", "port": "exec/out" },
+        "dest": { "block": "step8AcceptInvitation", "port": "exec/in" }
+      },
+      "c-accept-get-invitee": {
+        "src": { "block": "step8AcceptInvitation", "port": "exec/out" },
+        "dest": { "block": "step9GetCollectionAsInvitee", "port": "exec/in" }
+      },
+      "c-get-invitee-list-members": {
+        "src": { "block": "step9GetCollectionAsInvitee", "port": "exec/out" },
+        "dest": { "block": "step10ListMembers", "port": "exec/in" }
+      },
+      "c-list-members-delete": {
+        "src": { "block": "step10ListMembers", "port": "exec/out" },
+        "dest": { "block": "step11DeleteCollection", "port": "exec/in" }
+      },
+      "c-delete-log": {
+        "src": { "block": "step11DeleteCollection", "port": "exec/out" },
+        "dest": { "block": "logComplete", "port": "exec/in" }
+      }
+    },
     "annotations": {},
     "groups": {},
     "webhook": {
