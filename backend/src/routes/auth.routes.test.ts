@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, mock } from 'bun:test';
+import { afterAll, beforeEach, describe, expect, it, mock } from 'bun:test';
 import { createRouteTestApp, fixtures, jsonHeaders } from '../test/route-test-utils';
 
 const registerPassword = ['StrongPass', '123!'].join('');
@@ -124,5 +124,9 @@ describe('authRoutes', () => {
     expect(body.message).toBe('Authenticated user profile and session info');
     expect(body.user.id).toBe(fixtures.ownerUser.id);
     expect(body.session.id).toBe(fixtures.session.id);
+  });
+
+  afterAll(() => {
+    mock.restore();
   });
 });

@@ -5,6 +5,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import { createMcpRoutes } from '@/mcp';
 import { AppError } from '@/middleware/errorHandler';
 import { createRouteTestApp, fixtures, ids, jsonHeaders } from '../test/route-test-utils';
+import { clone } from '../test/common-test-utils';
 
 const TOKENS = {
   owner: 'owner-token',
@@ -45,8 +46,6 @@ const userService: any = {
 
 mock.module('@/services/collection.service', () => ({ collectionService }));
 const { collectionRoutes } = await import('../routes/collection.routes');
-
-const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
 const resolveSession: any = async (headers?: Pick<Headers, 'get'> | Record<string, unknown> | null) => {
   const headerRecord = (typeof headers === 'object' && headers ? headers as Record<string, unknown> : undefined);
@@ -642,4 +641,5 @@ describe('MCP routes', () => {
     expect(mcpResult.ok).toBe(true);
     expect(mcpResult.data.name).toBe(restBody.name);
   });
+
 });

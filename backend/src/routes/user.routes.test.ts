@@ -93,4 +93,5 @@ describe('userRoutes', () => {
     expect(response.status).toBe(400);
     expect(body).toEqual({ error: 'Content-Type must be application/json' });
   });
+
 });

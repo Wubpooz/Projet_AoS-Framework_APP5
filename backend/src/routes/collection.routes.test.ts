@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, mock } from 'bun:test';
 import { createRouteTestApp, fixtures, ids, jsonHeaders } from '../test/route-test-utils';
+import { clone } from '../test/common-test-utils';
 import { AppError } from '@/middleware/errorHandler';
 
 const collectionService: any = {
@@ -23,8 +24,6 @@ const collectionService: any = {
 mock.module('@/services/collection.service', () => ({ collectionService }));
 
 const { collectionRoutes } = await import('./collection.routes');
-
-const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
 function installStatefulScenarioService() {
   const state = {
@@ -642,4 +641,5 @@ describe('collectionRoutes', () => {
     expect(removedInviteeGetResponse.status).toBe(404);
     expect(removedInviteeGetBody).toEqual({ error: 'Collection not found' });
   });
+
 });

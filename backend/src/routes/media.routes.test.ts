@@ -129,4 +129,5 @@ describe('mediaRoutes', () => {
     expect(response.status).toBe(200);
     expect(body).toEqual({ message: 'Media deleted successfully' });
   });
+
 });
