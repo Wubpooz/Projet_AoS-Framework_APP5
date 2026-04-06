@@ -18,7 +18,7 @@ There is no front-end, see the progress tracking section at the bottom.
 
 &nbsp;  
 
-## Stack
+## Stack (Choix techniques)
 | Layer      | Tool                                                      |
 |------------|-----------------------------------------------------------|
 | Runtime    | [Bun](https://bun.sh)                                     |
@@ -355,7 +355,7 @@ bun run prisma:seed       # optional: re-seed
 
 ---
 
-## DataModel
+## DataModel (Décisions d'architecture)
 **Media** (films, séries, livres, articles, etc.) avec des champs tels que:  
 - Titre *string*
 - Description/synopsis *string*
@@ -423,3 +423,16 @@ bun run prisma:seed       # optional: re-seed
 - [ ] Tag/rating-based recommendations
 - [ ] External API integrations (IMDb, Goodreads, etc.)
 
+## 🚧 Difficultés rencontrées
+
+* **Intégration et configuration de Better Auth avec Hono :**
+    * *Problème :* Bien que puissant, mettre en place Better Auth au sein de l'écosystème Hono et s'assurer de la bonne gestion des sessions (via les headers `set-auth-token` et l'authentification `Bearer`) a nécessité une lecture approfondie de la documentation et plusieurs itérations de débogage.
+    * *Solution :* Nous avons structuré notre middleware d'authentification pour gérer de manière unifiée les requêtes de l'API REST et du serveur MCP.
+
+* **Développement du serveur MCP (Model Context Protocol) :**
+    * *Problème :* Implémenter le serveur MCP en parallèle de l'API REST, tout en réutilisant la logique métier (services) et en gérant correctement l'authentification par token pour les *tools* protégés, a été complexe. Les tests via `stdio` ont également posé quelques soucis de configuration initiale.
+    * *Solution :* Séparation claire de la logique métier (couche Service) des couches de transport (REST et MCP) et création de scripts de tests spécifiques (`bun run mcp:test`).
+
+* **Mise en place des tests d'intégration avec Postman :**
+    * *Problème :* Organiser les scénarios complexes impliquant plusieurs utilisateurs (comme le cycle de vie des invitations privées) tout en gérant correctement les variables d'environnement (tokens, IDs) dynamiquement entre les requêtes.
+    * *Solution :* Utilisation intensive des scripts de pré-requête et de post-réponse dans Postman pour automatiser la mise à jour des variables (`ownerToken`, `inviteeToken`, etc.) afin de pouvoir enchaîner les requêtes de manière fluide.
