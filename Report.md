@@ -22,7 +22,7 @@
 
 &nbsp;  
 ## Choix techniques et décisions d’architecture
-L'architecture est un monolithe modulaire orientée services avec séparation claire entre les routes REST, services, schémas de donnée, middleware et base de données.  
+L'architecture est un monolithe modulaire orienté services avec séparation claire entre les routes REST, services, schémas de données, middleware et base de données.  
 
 ### Stack et justification
 - Runtime: **Bun**
@@ -36,17 +36,17 @@ L'architecture est un monolithe modulaire orientée services avec séparation cl
 - Base de données: **PostgreSQL**
   BDD relationnelle standarde, robuste et compatible Prisma.
 - Authentification: **Better Auth**
-  Gestion extrement simple et centralisé des authentifications. S'intégre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
+  Gestion extrêmement simple et centralisée des authentifications. S'intègre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
 - Containerisation: **Docker**
 - CI/CD: **GitHub Actions**
 
 
 ### Décisions de conception API
 - Standardisation des endpoints par domaines (`auth`, `users`, `media`, `collections`).
-- Automatisation de la documentation OpenAPI pour faciliter l’intégration et les tests. La documentation est générée à partir des routes et des schémas de validation Zod (présents dans`src/schemas`), ce qui garantit qu’elle reste à jour avec l’implémentation en utilisant `openAPIRouteHandler` et `swaggerUI` de Hono. De plus cela évite que lors de future modifications de l'API, la documentation soit oubliée ou mal mise à jour puisque c'est directement lié à l'implémentation. Ca rend aussi les choix plus intentionnels. 
+- Automatisation de la documentation OpenAPI pour faciliter l’intégration et les tests. La documentation est générée à partir des routes et des schémas de validation Zod (présents dans`src/schemas`), ce qui garantit qu’elle reste à jour avec l’implémentation en utilisant `openAPIRouteHandler` et `swaggerUI` de Hono. De plus cela évite que lors de futures modifications de l'API, la documentation soit oubliée ou mal mise à jour puisque c'est directement lié à l'implémentation. Ça rend aussi les choix plus intentionnels. 
 - Gestion des droits par rôles sur les collections (OWNER, COLLABORATOR, READER, chercher `role || CollectionRole.READER`) et mécanisme d’invitation/acceptation par des endpoints dédiés (`/invitations`).
 - Ajout d’un rate limiting global pour limiter les abus.
-- (Bonus) Ajout d'un serveur MCP pour des usages d’assistant AI, avec des endpoints dédiés (`/mcp/collections`, `/mcp/media`) et une authentification basée sur les tokens d’API. C'est juste un "wrapper" sur l'API REST pour rendre plus facile l'intégration avec des outils d'assistant IA. Ce type de serveur peut être ensuite étendu pour ne plus être qu'un simple proxy et faire des actions plus complexes et "user-friendly".
+- (Bonus) Ajout d'un serveur MCP pour des usages d’assistant IA, avec des endpoints dédiés (`/mcp/collections`, `/mcp/media`) et une authentification basée sur les tokens d’API. C'est juste un "wrapper" sur l'API REST pour rendre plus facile l'intégration avec des outils d'assistant IA. Ce type de serveur peut être ensuite étendu pour ne plus être qu'un simple proxy et faire des actions plus complexes et "user-friendly".
 - (Bonus) CI/CD avec GitHub Actions pour:  
   - Assurer que l'OpenAPI soit à jour avant de pousser (il est généré à partir du code et on veut vérifier que la version présente dans `docs/openapi.yaml` soit à jour pour les développeurs).
   - Faire tourner un build de l'application pour vérifier que tout compile correctement.
@@ -74,7 +74,7 @@ L'architecture est un monolithe modulaire orientée services avec séparation cl
 ## Les + ou - du cours
 ### Retours positifs
 - Clair
-- Structure simple a suivre et se concentre sur les points importants
+- Structure simple à suivre et qui se concentre sur les points importants
 - Bon équilibre entre théorie et pratique
 - Technologies modernes et pertinentes
 
