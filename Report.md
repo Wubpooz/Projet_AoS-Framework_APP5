@@ -36,7 +36,7 @@ L'architecture est un monolithe modulaire orienté services avec séparation cla
 - Base de données: **PostgreSQL**
   BDD relationnelle standarde, robuste et compatible Prisma.
 - Authentification: **Better Auth**
-  Gestion extrêmement simple et centralisée des authentifications. S'intègre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
+  Gestion extrêmement simple et centralisée des authentifications. S'intégre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
 - Containerisation: **Docker**
 - CI/CD: **GitHub Actions**
 
