@@ -25,17 +25,17 @@
 L'architecture est un monolithe modulaire orientée services avec séparation claire entre les routes REST, services, schémas de donnée, middleware et base de données.  
 
 ### Stack et justification
-- Runtime: **Bun**.
+- Runtime: **Bun**
   Similaire et compatible avec Node.js. Bun est plus simple, rapide, intègre directement les tests et permet d'installer plus rapidement les dépendances. Le développement est plus fluide.
-- Serveur HTTP : **Hono**
+- Serveur HTTP: **Hono**
   Framework de prédiléction pour Bun, léger, simple à structurer, adapté aux API, supporte beaucoup de middlewares utiles (CORS, rate limiting, etc.), permet d’automatiser la documentation OpenAPI et d'autres fonctionnalités utiles.
-- Validation:  **Zod**.
+- Validation:  **Zod**
   Zod est un standard pour la validation. Il s'intégre aussi bien avec Hono. On peut facilement écrire un schéma, spécifier les types, des contraites supplémentaires, des optionnels etc.
 - ORM: **Prisma**
   Modèle de données typé, migrations versionnées, client permettant d'interagir directement avec la base de données PostgreSQL depuis Typescript. On a aussi les types générés automatiquement à partir du modèle de données, ce qui réduit les erreurs et facilite le développement.
-- Base de données: **PostgreSQL**.
+- Base de données: **PostgreSQL**
   BDD relationnelle standarde, robuste et compatible Prisma.
-- Authentification: **Better Auth**.
+- Authentification: **Better Auth**
   Gestion extrement simple et centralisé des authentifications. S'intégre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
 - Containerisation: **Docker**
 - CI/CD: **GitHub Actions**
@@ -48,10 +48,10 @@ L'architecture est un monolithe modulaire orientée services avec séparation cl
 - Ajout d’un rate limiting global pour limiter les abus.
 - (Bonus) Ajout d'un serveur MCP pour des usages d’assistant AI, avec des endpoints dédiés (`/mcp/collections`, `/mcp/media`) et une authentification basée sur les tokens d’API. C'est juste un "wrapper" sur l'API REST pour rendre plus facile l'intégration avec des outils d'assistant IA. Ce type de serveur peut être ensuite étendu pour ne plus être qu'un simple proxy et faire des actions plus complexes et "user-friendly".
 - (Bonus) CI/CD avec GitHub Actions pour:  
-  - Assurer que l'OpenAPI soit à jour avant de pousser (il est généré à partir du code et on veut vérifier que la version présente dans `docs/openapi.yaml` soit à jour pour les développeurs)
-  - Faire tourner un build de l'application pour vérifier que tout compile correctement
-  - Faire tourner les tests automatisés pour vérifier que les fonctionnalités principales fonctionnent et éviter les régressions
-  - Faire tourner CodeQL pour vérifier qu'il n'y a pas de vulnérabilités de sécurité connues dans les dépendances utilisées
+  - Assurer que l'OpenAPI soit à jour avant de pousser (il est généré à partir du code et on veut vérifier que la version présente dans `docs/openapi.yaml` soit à jour pour les développeurs).
+  - Faire tourner un build de l'application pour vérifier que tout compile correctement.
+  - Faire tourner les tests automatisés pour vérifier que les fonctionnalités principales fonctionnent et éviter les régressions.
+  - Faire tourner CodeQL pour vérifier qu'il n'y a pas de vulnérabilités de sécurité connues dans les dépendances utilisées.
 
 
 ### Qualité, tests et exploitation
