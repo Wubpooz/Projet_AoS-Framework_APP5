@@ -9,7 +9,6 @@
 
 &nbsp;  
 ## Prérequis
-- [ ] Microservices => architecture modulaire routes/services, mais backend monolithique unique
 - [x] Gestion d’au moins deux types d’objets => Media et Collection (+ User / CollectionUser / CollectionMedia)
 - [x] Implémentation des requêtes API classiques : GET, POST, PUT, DELETE
 - [x] Pagination des résultats => support des paramètres `page`, `pageSize` et `cursor` sur /api/media et /api/collections
@@ -23,7 +22,7 @@
 
 &nbsp;  
 ## Choix techniques et décisions d’architecture
-L'architecture est orientée services avec séparation claire entre les routes REST, services, schémas de donnée, middleware et base de données.  
+L'architecture est un monolithe modulaire orientée services avec séparation claire entre les routes REST, services, schémas de donnée, middleware et base de données.  
 
 ### Stack et justification
 - Runtime: **Bun**.
