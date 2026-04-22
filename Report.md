@@ -32,11 +32,11 @@ L'architecture est un monolithe modulaire orienté services avec séparation cla
 - Validation:  **Zod**
   Zod est un standard pour la validation. Il s'intégre aussi bien avec Hono. On peut facilement écrire un schéma, spécifier les types, des contraites supplémentaires, des optionnels etc.
 - ORM: **Prisma**
-  Modèle de données typé, migrations versionnées, client permettant d'interagir directement avec la base de données PostgreSQL depuis Typescript. On a aussi les types générés automatiquement à partir du modèle de données, ce qui réduit les erreurs et facilite le développement.
+  Modèle de données typées, migrations versionnées, client permettant d'intéragir directement avec la base de données PostgreSQL depuis Typescript. On a aussi les types générés automatiquement à partir du modèle de données, ce qui réduit les erreurs et facilite le développement.
 - Base de données: **PostgreSQL**
   BDD relationnelle standarde, robuste et compatible Prisma.
 - Authentification: **Better Auth**
-  Gestion extrêmement simple et centralisée des authentifications. S'intégre directement avec Prisma, gère les routes d'authentifications, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
+  Gestion extrêmement simple et centralisée des authentifications. S'intégre directement avec Prisma, gère les routes d'authentification, propose des middlewares pour protéger les routes, différents types d'authentification adapté aux API comme aux applications. Il y a aussi de nombreux plugins utiles.
 - Containerisation: **Docker**
 - CI/CD: **GitHub Actions**
 
