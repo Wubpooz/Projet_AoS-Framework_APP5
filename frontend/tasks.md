@@ -1,69 +1,54 @@
-### 1. Structure de l'Application et Fonctionnalités
+Je comprends tes remarques. Le travail a été réorganisé pour que chaque développeur ait une charge de travail équilibrée, comprenant à la fois de la création d'interface (UI), de la logique métier, des appels API et la rédaction de tests. Le rôle purement "Architecture/DevOps" a été supprimé pour répartir ces responsabilités.
 
-Puisque le backend gère déjà des "Media" (films, séries, livres) et des "Collections", l'application s'appellera **MediaTracker**.
-
-#### Les 4 Pages Requises (Navigation)
-
-1. **Catalogue (Home) :** Liste paginée issue de `GET /api/media`. Barre de recherche avec délai (*debounce*) et annulation de requête (*AbortController*). Filtres par type (FILM, SERIES, etc.) et tags.
-2. **Détail d'un Média (`/media/:id`) :** Affiche toutes les infos d'un média. Permet de l'ajouter à une de ses collections.
-3. **Mes Collections (`/collections`) :** Gère les listes personnelles (requiert d'être connecté -> **Route Guard**). Appelle `GET /api/collections`.
-4. **Tableau de bord / Statistiques (`/stats`) :** Affiche des graphiques ou des compteurs calculés à partir du store Pinia (ex: "Vous avez 45 médias dans vos collections, dont 80% de films").
-
-#### Composants Réutilisables (Exigences techniques)
-
-1. `MediaCard.vue` : Affiche un média (Props : item, Emits : clic, Slot : bouton d'action personnalisé).
-2. `AppModal.vue` : Modale réutilisable rendue hors de l'arbre DOM (*Teleport* - **Bonus**).
-3. `CustomRating.vue` ou `CustomSelect.vue` : Composant avec liaison bidirectionnelle personnalisée (`v-model`) pour noter un média ou filtrer par type.
-4. `StatWidget.vue` : Petite carte affichant un chiffre clé sur le dashboard.
-5. `SearchBar.vue` : Champ de recherche avec debounce intégré.
+Voici la nouvelle structure du projet, centrée sur une application de suivi de médias (MediaTracker).
 
 ---
 
-### 2. Répartition des Tâches (Équipe de 4 personnes)
+### Architecture et Fonctionnalités Générales
 
-Chaque membre a environ 12h de travail. La répartition suivante équilibre l'architecture, la logique métier, l'UI et les tests.
-
-#### 🧑‍💻 Développeur A : Lead Architecture, Authentification & Déploiement
-
-*Son rôle : Mettre en place les fondations, la connexion avec le backend existant et l'infrastructure.*
-
-* **Initialisation :** Setup du projet Vue 3 + Vite + TypeScript + Pinia + Vue Router.
-* **Routage & Lazy Loading :** Configuration du router avec chargement différé (`() => import(...)`) pour les écrans secondaires.
-* **Authentification (Bonus validé) :** Connexion avec `POST /api/auth/login` et `GET /api/auth/me`. Stockage du token Bearer et configuration de l'intercepteur HTTP (ex: Axios ou fetch custom).
-* **Sécurité :** Mise en place des *Navigation Guards* (empêcher l'accès à `/collections` et `/stats` si non connecté).
-* **DevOps :** Gestion des variables d'environnement (`.env.example`), configuration du build de production et déploiement public (ex: Vercel, Netlify ou Render).
-
-#### 🧑‍💻 Développeur B : Catalogue, Recherche & Performances
-
-*Son rôle : Gérer le flux principal de données (la page la plus lourde de l'application) et la fluidité.*
-
-* **Page Catalogue :** Consommation de `GET /api/media` avec pagination (ou infinite scroll).
-* **Recherche Optimisée :** Implémentation d'un champ de recherche avec *debounce* (ne pas spammer l'API à chaque lettre).
-* **Annulation de requêtes :** Utilisation d'`AbortController` pour annuler une recherche en cours si l'utilisateur change de page ou tape un nouveau mot.
-* **Détail Média :** Création de la vue `/media/:id` avec récupération des données spécifiques.
-* **Bonus (KeepAlive) :** Maintenir l'état de la page catalogue (scroll et filtres) lors d'un retour depuis la page détail avec `<KeepAlive>`.
-
-#### 🧑‍💻 Développeur C : État Centralisé, Collections & V-Model Custom
-
-*Son rôle : Gérer l'expérience personnelle de l'utilisateur (le "cœur" interactif).*
-
-* **Store Pinia :** Création du store pour centraliser les listes de l'utilisateur. Appel à `GET /api/collections` et persistance locale des données courantes pour éviter les requêtes redondantes.
-* **Gestion des listes :** UI et logique pour ajouter/retirer un média d'une collection (`POST /api/collections/{id}/media` et `DELETE`).
-* **Réflexion globale :** S'assurer qu'un média déjà dans une liste affiche une icône spécifique partout dans l'application (catalogue, détail) en lisant le store Pinia.
-* **Composant v-model :** Création du composant complexe avec liaison bidirectionnelle (par exemple, un `CustomSelect.vue` pour choisir dans quelle collection ajouter le média, ou un système de notation par étoiles).
-
-#### 🧑‍💻 Développeur D : Statistiques, UI Avancée & Tests
-
-*Son rôle : Mettre en valeur la donnée, soigner l'expérience utilisateur et assurer la qualité du code.*
-
-* **Dashboard / Statistiques :** Création de la page `/stats` qui agrège les données du store Pinia en temps réel (total des films, répartition par type, etc. via des `computed`).
-* **Composants UI (Slots & Teleport) :** Création de `MediaCard.vue` (avec injection de contenu via `<slot>`) et de `AppModal.vue` (en utilisant `<Teleport>` pour contourner les z-index).
-* **Bonus UI :** Implémentation du Dark Mode persistant (respectant les préférences système) et des transitions de page Vue (`<Transition>`).
-* **Tests Automatisés :** Mise en place de Vitest/Vue Test Utils. Écriture des tests requis :
-* Test d'une fonction métier (ex: le calcul des statistiques).
-* Test du composant `CustomRating` ou `MediaCard`.
-* Test du Store Pinia.
-
-
+* **Composants réutilisables (5 minimum) :** Carte média, Barre de recherche, Modale, Sélecteur personnalisé, Composant statistique.
+* **Pages requises (4 minimum) :** Catalogue général, Détail du média, Mes Collections, Tableau de bord (Statistiques).
 
 ---
+
+### Répartition des Tâches (4 Développeurs)
+
+#### Développeur 1 : Base, Routage et Authentification
+
+* **Configuration initiale :** Initialisation du projet avec Vue 3, Vite, TypeScript et configuration du routeur.
+* **Interface (Pages) :** Création du layout global (Menu de navigation statique) et de la page de Connexion/Inscription.
+* **Intégration API :** Connexion aux routes `/api/auth/login` et `/api/auth/me` pour récupérer et stocker le token de session.
+* **Logique spécifique :** Implémentation des "Navigation Guards" dans Vue Router pour bloquer l'accès aux pages privées (Collections, Statistiques) aux utilisateurs non connectés.
+* **Tests :** Écriture des tests unitaires pour vérifier la logique de validation de l'authentification et les redirections du routeur.
+
+#### Développeur 2 : Catalogue, Recherche et Performances
+
+* **Interface (Pages) :** Création de la page principale affichant la liste du catalogue global.
+* **Intégration API :** Consommation de la route `/api/media` avec prise en charge de la pagination.
+* **Logique spécifique 1 (Debounce) :** Implémentation d'une barre de recherche fluide qui retarde l'appel réseau pour ne pas l'exécuter à chaque frappe.
+* **Logique spécifique 2 (AbortController) :** Ajout de l'annulation des requêtes réseau obsolètes en cas de nouvelle recherche ou de changement de page.
+* **Tests :** Écriture des tests unitaires pour valider la fonction de délai (debounce) et le filtrage des éléments.
+
+#### Développeur 3 : État Centralisé et Interactions
+
+* **Interface (Pages) :** Création de la page "Mes Collections" et de la page "Détail d'un média" (accessible via l'URL `/media/:id`).
+* **Intégration API :** Connexion aux routes `/api/collections` pour lire, ajouter et supprimer des médias de la liste personnelle.
+* **Logique spécifique 1 (Pinia) :** Création du store centralisé pour stocker les collections et refléter leur statut (ex: afficher une icône si le média est déjà ajouté) sur toutes les pages de l'application.
+* **Logique spécifique 2 (v-model) :** Développement d'un composant d'interface avec liaison bidirectionnelle personnalisée (ex: un composant d'évaluation ou un sélecteur de tag personnalisé).
+* **Tests :** Écriture des tests unitaires pour valider les actions de mise à jour et l'état par défaut du store Pinia.
+
+#### Développeur 4 : Synthèse, UI Avancée et Déploiement
+
+* **Interface (Pages) :** Création de la page "Statistiques" affichant des données agrégées à l'utilisateur.
+* **Logique spécifique 1 (Données dérivées) :** Création de variables calculées (`computed`) basées sur le store Pinia pour alimenter les graphiques ou compteurs (totaux, moyennes, répartition par type).
+* **Logique spécifique 2 (Teleport & Slots) :** Développement d'un composant de modale réutilisable rendu en dehors de l'arbre DOM principal, incluant l'injection de contenu dynamique.
+* **Déploiement et Configuration :** Gestion des variables d'environnement (`.env.example`), configuration de la compilation pour la production et déploiement de l'application sur un hébergeur public.
+* **Tests :** Écriture des tests d'intégration vérifiant le bon calcul des statistiques et leur affichage dans l'interface.
+
+---
+
+### Suivi des Exigences Techniques (Checklist Commune)
+
+* **Typage TypeScript :** Le fichier `openapi.yml` fourni par le backend doit être utilisé par tous les développeurs pour définir les interfaces exactes des entités.
+* **CSS :** Utilisation de CSS classique, SCSS ou Tailwind. L'utilisation de librairies de composants prêts à l'emploi (Vuetify, Bootstrap Vue) est proscrite.
+* **Communication inter-composants :** Utilisation stricte du passage de données via *props* (parent vers enfant) et *emits* (enfant vers parent) pour éviter le passage de propriétés sur de multiples niveaux.
