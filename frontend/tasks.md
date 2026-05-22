@@ -1,16 +1,3 @@
-Je comprends tes remarques. Le travail a été réorganisé pour que chaque développeur ait une charge de travail équilibrée, comprenant à la fois de la création d'interface (UI), de la logique métier, des appels API et la rédaction de tests. Le rôle purement "Architecture/DevOps" a été supprimé pour répartir ces responsabilités.
-
-Voici la nouvelle structure du projet, centrée sur une application de suivi de médias (MediaTracker).
-
----
-
-### Architecture et Fonctionnalités Générales
-
-* **Composants réutilisables (5 minimum) :** Carte média, Barre de recherche, Modale, Sélecteur personnalisé, Composant statistique.
-* **Pages requises (4 minimum) :** Catalogue général, Détail du média, Mes Collections, Tableau de bord (Statistiques).
-
----
-
 ### Répartition des Tâches (4 Développeurs)
 
 #### Développeur 1 : Base, Routage et Authentification
@@ -44,11 +31,3 @@ Voici la nouvelle structure du projet, centrée sur une application de suivi de 
 * **Logique spécifique 2 (Teleport & Slots) :** Développement d'un composant de modale réutilisable rendu en dehors de l'arbre DOM principal, incluant l'injection de contenu dynamique.
 * **Déploiement et Configuration :** Gestion des variables d'environnement (`.env.example`), configuration de la compilation pour la production et déploiement de l'application sur un hébergeur public.
 * **Tests :** Écriture des tests d'intégration vérifiant le bon calcul des statistiques et leur affichage dans l'interface.
-
----
-
-### Suivi des Exigences Techniques (Checklist Commune)
-
-* **Typage TypeScript :** Le fichier `openapi.yml` fourni par le backend doit être utilisé par tous les développeurs pour définir les interfaces exactes des entités.
-* **CSS :** Utilisation de CSS classique, SCSS ou Tailwind. L'utilisation de librairies de composants prêts à l'emploi (Vuetify, Bootstrap Vue) est proscrite.
-* **Communication inter-composants :** Utilisation stricte du passage de données via *props* (parent vers enfant) et *emits* (enfant vers parent) pour éviter le passage de propriétés sur de multiples niveaux.
