@@ -1,6 +1,7 @@
 {
   "version": 2,
   "bunVersion": "1.x",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
