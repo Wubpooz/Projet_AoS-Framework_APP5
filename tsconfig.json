@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true, // for importing .ts files without extension
+    "rewriteRelativeImportExtensions": true, // for importing .ts files without extension
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["@types/bun"],
+    "paths": {
+      "@/*": ["./backend/src/*"]
+    }
+  },
+  "include": ["api/**/*"]
+}

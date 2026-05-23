@@ -7,12 +7,16 @@ WORKDIR /usr/src/app
 # Install full dependencies (for development/build tasks)
 FROM base AS deps
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
+RUN bun install --frozen-lockfile --ignore-scripts
 
 # Install production-only dependencies
 FROM base AS prod-deps
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production
+COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
+RUN bun install --frozen-lockfile --production --ignore-scripts
 
 # Build context stage (keeps all source files available)
 FROM base AS build

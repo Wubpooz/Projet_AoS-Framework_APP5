@@ -63,10 +63,16 @@ app.use("*", async (c, next) => {
 app.use(
 	"*", // CORS enabled for all routes (required for Swagger UI)
 	cors({
-		origin: "http://localhost:3000",
-    allowHeaders: ["Content-Type", "Authorization", "MCP-Protocol-Version", "Mcp-Session-Id", "Last-Event-ID"],
+		origin: (origin) => {
+			// CORS origin function expects the allowed origin string, or null/undefined to deny
+			if (process.env.NODE_ENV === 'production') {
+				return origin === env.FRONTEND_URL || origin === env.BETTER_AUTH_URL ? origin : env.FRONTEND_URL;
+			}
+			return origin === "http://localhost:4200" || origin === "http://localhost:5173" ? origin : "http://localhost:3000";
+		},
+		allowHeaders: ["Content-Type", "Authorization", "MCP-Protocol-Version", "Mcp-Session-Id", "Last-Event-ID"],
 		allowMethods: ["POST", "GET", "PATCH", "DELETE", "OPTIONS"],
-    exposeHeaders: ["Content-Length", "set-auth-token", "MCP-Protocol-Version", "Mcp-Session-Id"],
+		exposeHeaders: ["Content-Length", "set-auth-token", "MCP-Protocol-Version", "Mcp-Session-Id"],
 		maxAge: 600,
 		credentials: true
 	})
@@ -75,7 +81,10 @@ app.use(
 // CSRF protection - disabled for Swagger UI in development
 if (process.env.NODE_ENV === 'production') {
   app.use(csrf({
-    origin: ["http://localhost:3000"],
+    // Trust requests coming from the same host or frontend in production
+    origin: (origin) => {
+      return origin === env.FRONTEND_URL || origin === env.BETTER_AUTH_URL; 
+    },
     secFetchSite: ['same-origin', 'same-site']
   }));
 }
@@ -120,7 +129,10 @@ app.get(
         description: 'A simple API for managing a media collection (movies, TV shows, books, etc.)',
       },
       servers: [
-        { url: 'http://localhost:3000', description: 'Local Server' },
+        { 
+          url: process.env.NODE_ENV === 'production' ? '/' : 'http://localhost:3000', 
+          description: process.env.NODE_ENV === 'production' ? 'Production API' : 'Local Server' 
+        },
       ],
       tags: [
         { name: 'Auth', description: 'Authentication endpoints' },
